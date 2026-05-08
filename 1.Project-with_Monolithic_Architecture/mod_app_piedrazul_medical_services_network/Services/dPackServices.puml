@@ -1,9 +1,0 @@
-@startuml ApplicationPackages
-
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
-
-package "application" {
-  package "services" {}
-}
-
-@enduml
