@@ -68,9 +68,7 @@ Medical-Services-Network/
 │   ├── product/
 │   └── specs/
 │
-├── AGENTS.md                     # Instrucciones para agentes IA
-├── README.md                      # Este archivo
-└── docs/conventions.md           # Convenciones del proyecto
+└── README.md                      # Este archivo
 ```
 
 ---
@@ -113,8 +111,6 @@ java -jar services/users-service/target/users-service-*.jar
 | Documento | Descripción |
 |-----------|-------------|
 | `ADRs/` | Architectural Decision Records |
-| `docs/architecture/system-overview.md` | Visión general del sistema |
-| `docs/conventions.md` | Convenciones de código |
 | `docs/product/user-stories/` | Historias de usuario |
 
 ---

@@ -55,7 +55,6 @@ The 5 SOLID principles are adopted as design standard:
 | Alternative | Why Rejected |
 |------------|-------------|
 | No documentation | Traceability gap, implicit decisions |
-| Only in conventions.md | Secondary doc, not an ADR |
 | Single ADR for patterns + principles | Clear separation: principles vs patterns |
 
 ## Consequences
