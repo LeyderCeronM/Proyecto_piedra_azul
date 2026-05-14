@@ -1,0 +1,25 @@
+@startuml ControllerOperations
+' ====================================================================
+' Operations Diagram - UserController
+' Shows ONLY endpoints and methods (no relationships).
+' ====================================================================
+
+skinparam classAttributeIconSize 0
+skinparam defaultFontName SansSerif
+
+class UserController <<controller>> #87CEEB;line:Black {
+  -userService: UserService
+  ..
+  {method} +{static} getAllUsers(): ResponseEntity<List<UserResponse>> [GET /api/users]
+  {method} +{static} getUserById(Long id): ResponseEntity<UserResponse> [GET /api/users/{id}]
+  {method} +{static} createUser(CreateUserRequest request): ResponseEntity<UserResponse> [POST /api/users]
+  {method} +{static} updateUser(Long id, UpdateUserRequest request): ResponseEntity<UserResponse> [PUT /api/users/{id}]
+  {method} +{static} deactivateUser(Long id): ResponseEntity<Void> [PATCH /api/users/{id}/deactivate]
+  {method} +{static} validatePatient(String documentNumber): ResponseEntity<Boolean> [GET /api/users/patients/validate/{documentNumber}]
+  ..
+  {method} +handleIllegalArgument(IllegalArgumentException ex): ResponseEntity<String> [@ExceptionHandler]
+}
+
+note "Operaciones: Solo se muestran endpoints y metodos\nRelaciones ver 03-controller.puml" as N1
+
+@enduml

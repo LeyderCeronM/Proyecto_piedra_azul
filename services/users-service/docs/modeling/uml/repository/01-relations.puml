@@ -1,0 +1,59 @@
+@startuml RepositoryRelations
+' ====================================================================
+' Class Diagram - Repositories
+' Reflects EXACTLY com.medical.repository.
+' Spring Data JPA repositories.
+' ====================================================================
+
+skinparam classAttributeIconSize 0
+skinparam defaultFontName SansSerif
+
+package "com.medical.repository" as repoPkg #F0F0F0 {
+
+  interface IUserRepository <<interface>> #F0F8FF;line:blue {
+    {method} +findByUsername(String): Optional<User>
+    {method} +findByEmail(String): Optional<User>
+    {method} +existsByUsername(String): boolean
+    {method} +existsByEmail(String): boolean
+    {method} +countByRoleAndActive(UserRole, boolean): long
+  }
+
+  interface IPatientRepository <<interface>> #F0F8FF;line:blue {
+    {method} +findByDocumentNumber(String): Optional<Patient>
+    {method} +existsByDocumentNumber(String): boolean
+  }
+
+}
+
+package "com.medical.entities" as entityPkg #F0F0F0 {
+  class User <<entity>> #FFFACD;line:Black
+  class Patient <<entity>> #FFFACD;line:Black
+}
+
+package "org.springframework.data.jpa.repository" as jpaPkg #F0F0F0 {
+  interface JpaRepository <<interface>> #F0F8FF;line:blue
+}
+
+' === INHERITANCE ===
+JpaRepository <|-- IUserRepository : "extends"
+JpaRepository <|-- IPatientRepository : "extends"
+
+' === USAGE ===
+IUserRepository "1" --> "1" User : "manages"
+IPatientRepository "1" --> "1" Patient : "manages"
+
+note bottom of IUserRepository
+  **Repositorio de Usuarios**
+  Metodos de busqueda por
+  username, email, y conteo
+  por rol/estado.
+end note
+
+note bottom of IPatientRepository
+  **Repositorio de Pacientes**
+  Busqueda por numero de
+  documento para validacion
+  asincronica (RabbitMQ).
+end note
+
+@enduml

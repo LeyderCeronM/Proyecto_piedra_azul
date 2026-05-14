@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
+import com.medical.enums.UserRole;
+
 /**
  * Base user entity for authentication and basic information.
  */
