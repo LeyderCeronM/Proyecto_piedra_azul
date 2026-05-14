@@ -17,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * RabbitMQ listener for patient validation requests.
  * Consumes requests from appointments-service and publishes responses.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Component
 @RequiredArgsConstructor

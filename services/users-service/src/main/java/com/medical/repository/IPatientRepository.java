@@ -8,6 +8,7 @@ import java.util.Optional;
 
 /**
  * Repository for Patient entity.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Repository
 public interface IPatientRepository extends JpaRepository<Patient, Long> {

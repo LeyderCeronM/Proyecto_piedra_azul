@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 /**
  * Strategy for creating users with PROFESSIONAL role.
  * Validates that specialty and license number are provided.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Component
 public class ProfessionalCreationStrategy implements IUserCreationStrategy {

@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 /**
  * Factory that provides the appropriate UserCreationStrategy for a given role.
  * Strategies are automatically injected by Spring via the constructor.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Component
 public class UserCreationFactory {

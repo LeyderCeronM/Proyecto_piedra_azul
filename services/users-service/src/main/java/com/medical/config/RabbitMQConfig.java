@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * RabbitMQ configuration for users-service.
  * Sets up exchange, queues, and bindings for async patient validation.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Configuration
 public class RabbitMQConfig {

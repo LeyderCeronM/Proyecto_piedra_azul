@@ -8,6 +8,7 @@ import com.medical.enums.UserRole;
 
 /**
  * Base user entity for authentication and basic information.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Entity
 @Table(name = "users")

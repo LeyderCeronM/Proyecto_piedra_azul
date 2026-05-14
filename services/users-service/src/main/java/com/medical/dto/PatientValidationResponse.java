@@ -10,6 +10,7 @@ import java.io.Serializable;
 /**
  * Response message for patient validation via RabbitMQ.
  * Sent from users-service to appointments-service.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Data
 @Builder

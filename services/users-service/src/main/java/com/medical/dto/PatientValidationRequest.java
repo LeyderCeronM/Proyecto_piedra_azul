@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 /**
  * Request message for patient validation via RabbitMQ.
  * Sent from appointments-service to users-service.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Data
 @Builder

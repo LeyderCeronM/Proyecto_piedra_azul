@@ -18,6 +18,7 @@ import static org.mockito.Mockito.verify;
 
 /**
  * Tests for PatientCreationStrategy.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @ExtendWith(MockitoExtension.class)
 class PatientCreationStrategyTest {

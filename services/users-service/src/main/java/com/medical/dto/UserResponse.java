@@ -7,6 +7,7 @@ import com.medical.enums.UserRole;
 
 /**
  * Response DTO for user data.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Data
 @NoArgsConstructor

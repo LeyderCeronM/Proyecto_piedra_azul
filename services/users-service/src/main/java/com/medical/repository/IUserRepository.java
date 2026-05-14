@@ -8,6 +8,7 @@ import java.util.Optional;
 
 /**
  * Repository for User entity.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Repository
 public interface IUserRepository extends JpaRepository<User, Long> {

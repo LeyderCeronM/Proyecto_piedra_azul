@@ -23,6 +23,7 @@ import static org.mockito.Mockito.*;
 
 /**
  * Tests for UserService - following TDD (RED → GREEN → REFACTOR)
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)

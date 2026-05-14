@@ -9,6 +9,7 @@ import lombok.*;
 
 /**
  * Request DTO for creating a new user.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Data
 @NoArgsConstructor

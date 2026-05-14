@@ -20,6 +20,7 @@ import java.util.Optional;
 
 /**
  * Service for user management.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Service
 @RequiredArgsConstructor

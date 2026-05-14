@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 /**
  * Patient specific data.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Entity
 @Table(name = "patients")

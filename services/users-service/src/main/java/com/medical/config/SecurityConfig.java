@@ -10,6 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 /**
  * Security configuration - For development, allows all endpoints.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Configuration
 @EnableWebSecurity

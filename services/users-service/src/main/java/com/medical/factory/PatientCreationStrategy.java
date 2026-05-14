@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
  * Strategy for creating users with PATIENT role.
  * Validates patient-specific required fields and creates the associated Patient
  * entity.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Component
 @RequiredArgsConstructor

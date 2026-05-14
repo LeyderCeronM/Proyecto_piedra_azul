@@ -8,6 +8,7 @@ import com.medical.enums.UserRole;
  * Strategy interface for creating users of different roles.
  * Each role has its own strategy that knows how to build the User entity
  * and optionally create associated entities (e.g., Patient record).
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 public interface IUserCreationStrategy {
 

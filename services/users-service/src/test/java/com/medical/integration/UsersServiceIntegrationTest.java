@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Integration tests for users-service.
  * Run with: mvn test -Dtest=UsersServiceIntegrationTest
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UsersServiceIntegrationTest {

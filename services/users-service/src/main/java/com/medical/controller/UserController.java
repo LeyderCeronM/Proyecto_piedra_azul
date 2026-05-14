@@ -15,6 +15,7 @@ import java.util.List;
 /**
  * REST Controller for user management.
  * Following E1-US1, E1-US2, E1-US3, E1-US4 acceptance criteria.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @RestController
 @RequestMapping("/api/users")

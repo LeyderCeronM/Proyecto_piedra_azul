@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * Tests for UserCreationFactory.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @ExtendWith(MockitoExtension.class)
 class UserCreationFactoryTest {

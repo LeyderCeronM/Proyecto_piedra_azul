@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Strategy for creating users with ADMIN role.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Component
 public class AdminCreationStrategy implements IUserCreationStrategy {

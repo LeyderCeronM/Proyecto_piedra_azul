@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for ProfessionalCreationStrategy.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 class ProfessionalCreationStrategyTest {
 

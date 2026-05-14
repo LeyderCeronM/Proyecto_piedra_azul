@@ -8,6 +8,7 @@ import lombok.*;
 
 /**
  * Request DTO for updating a user.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Data
 @NoArgsConstructor
