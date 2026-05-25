@@ -10,11 +10,14 @@ import com.medical.factory.UserCreationFactory;
 import com.medical.factory.IUserCreationStrategy;
 import com.medical.repository.IUserRepository;
 import com.medical.repository.IPatientRepository;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -204,5 +207,75 @@ public class UserService {
   @Transactional(readOnly = true)
   public Optional<Patient> getPatientByDocument(String documentNumber) {
     return patientRepository.findByDocumentNumber(documentNumber);
+  }
+
+  // ──────────────────────────────────────────────
+  // Search endpoints
+  // ──────────────────────────────────────────────
+
+  /**
+   * Search users by exact username.
+   */
+  @Transactional(readOnly = true)
+  public List<UserResponse> searchByUsername(String username) {
+    return userRepository.findAllByUsername(username).stream()
+        .map(this::mapToResponse)
+        .toList();
+  }
+
+  /**
+   * Search users by exact email.
+   */
+  @Transactional(readOnly = true)
+  public List<UserResponse> searchByEmail(String email) {
+    return userRepository.findAllByEmail(email).stream()
+        .map(this::mapToResponse)
+        .toList();
+  }
+
+  /**
+   * Search users by role.
+   */
+  @Transactional(readOnly = true)
+  public List<UserResponse> searchByRole(UserRole role) {
+    return userRepository.findByRole(role).stream()
+        .map(this::mapToResponse)
+        .toList();
+  }
+
+  /**
+   * Search users by active status.
+   */
+  @Transactional(readOnly = true)
+  public List<UserResponse> searchByStatus(Boolean active) {
+    return userRepository.findByActive(active).stream()
+        .map(this::mapToResponse)
+        .toList();
+  }
+
+  /**
+   * Advanced search with any combination of filters.
+   */
+  @Transactional(readOnly = true)
+  public List<UserResponse> searchAdvanced(String username, String email, UserRole role, Boolean active) {
+    Specification<User> spec = (root, query, cb) -> {
+      List<Predicate> predicates = new ArrayList<>();
+      if (username != null) {
+        predicates.add(cb.equal(root.get("username"), username));
+      }
+      if (email != null) {
+        predicates.add(cb.equal(root.get("email"), email));
+      }
+      if (role != null) {
+        predicates.add(cb.equal(root.get("role"), role));
+      }
+      if (active != null) {
+        predicates.add(cb.equal(root.get("active"), active));
+      }
+      return cb.and(predicates.toArray(new Predicate[0]));
+    };
+    return userRepository.findAll(spec).stream()
+        .map(this::mapToResponse)
+        .toList();
   }
 }

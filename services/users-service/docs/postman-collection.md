@@ -15,7 +15,12 @@
 | 4 | `PUT` | `/api/users/{id}` | Actualizar usuario |
 | 5 | `PATCH` | `/api/users/{id}/deactivate` | Desactivar usuario |
 | 6 | `GET` | `/api/users/patients/validate/{documentNumber}` | Validar paciente por documento |
-| 7 | `GET` | `/actuator/health` | Health check |
+| 7 | `GET` | `/api/users/search/username/{username}` | Buscar por username |
+| 8 | `GET` | `/api/users/search/email/{email}` | Buscar por email |
+| 9 | `GET` | `/api/users/search/role/{role}` | Buscar por rol |
+| 10 | `GET` | `/api/users/search/status?active=true\|false` | Buscar por estado |
+| 11 | `GET` | `/api/users/search/advanced?username=&email=&role=&active=` | Búsqueda combinada |
+| 12 | `GET` | `/actuator/health` | Health check |
 
 ---
 
@@ -233,6 +238,46 @@ false
 
 ---
 
+## 7. Buscar por username
+
+> **`GET /api/users/search/username/{username}`**
+> Busca usuarios cuyo username coincida exactamente.
+
+```json
+// Response 200 — List<UserResponse>
+[
+  {
+    "id": 1,
+    "username": "testadmin",
+    "email": "testadmin@medical.com",
+    "role": "ADMIN",
+    "active": true
+  }
+]
+```
+
+## 8. Buscar por email
+
+> **`GET /api/users/search/email/{email}`**
+> Busca usuarios cuyo email coincida exactamente.
+
+## 9. Buscar por rol
+
+> **`GET /api/users/search/role/{role}`**
+> Rol válido: `ADMIN`, `SCHEDULER`, `PATIENT`, `PROFESSIONAL`. Rol inválido → HTTP 400.
+
+## 10. Buscar por estado
+
+> **`GET /api/users/search/status?active=true|false`**
+> Filtra por usuarios activos o inactivos. Parámetro `active` requerido.
+
+## 11. Búsqueda combinada
+
+> **`GET /api/users/search/advanced?username=&email=&role=&active=`**
+> Todos los parámetros son opcionales. Devuelve usuarios que coinciden con TODOS los filtros provistos (AND lógico).
+
+---
+
 ## Reglas de validación
 
 | Campo | Regla |
@@ -257,4 +302,9 @@ false
 6. Actualizar → `PUT /api/users/1`
 7. Validar paciente → `GET /api/users/patients/validate/1234567890`
 8. Desactivar → `PATCH /api/users/3/deactivate`
-9. Health check → `GET /actuator/health`
+9. Buscar por username → `GET /api/users/search/username/testadmin`
+10. Buscar por email → `GET /api/users/search/email/patient@email.com`
+11. Buscar por rol → `GET /api/users/search/role/PATIENT`
+12. Buscar activos → `GET /api/users/search/status?active=true`
+13. Búsqueda combinada → `GET /api/users/search/advanced?role=ADMIN&active=true`
+14. Health check → `GET /actuator/health`

@@ -166,7 +166,46 @@ DEACT_HTTP=$(echo "$DEACT_RESP" | tail -1)
 check_status 204 "$DEACT_HTTP" "Deactivate User"
 
 # ──────────────────────────────────────────────
-echo -e "\n${YELLOW}[11] Create Duplicate Username (should fail)${NC}"
+echo -e "\n${YELLOW}[11] Search by Username${NC}"
+SEARCH_USERNAME_RESP=$(curl -s -w "\n%{http_code}" "$BASE_URL/api/users/search/username/testadmin" 2>/dev/null || echo "000")
+SEARCH_USERNAME_HTTP=$(echo "$SEARCH_USERNAME_RESP" | tail -1)
+SEARCH_USERNAME_BODY=$(echo "$SEARCH_USERNAME_RESP" | sed '$d')
+check_status 200 "$SEARCH_USERNAME_HTTP" "Search by Username"
+check_body_contains "$SEARCH_USERNAME_BODY" "testadmin" "Found admin"
+
+# ──────────────────────────────────────────────
+echo -e "\n${YELLOW}[12] Search by Email${NC}"
+SEARCH_EMAIL_RESP=$(curl -s -w "\n%{http_code}" "$BASE_URL/api/users/search/email/doctor@medical.com" 2>/dev/null || echo "000")
+SEARCH_EMAIL_HTTP=$(echo "$SEARCH_EMAIL_RESP" | tail -1)
+SEARCH_EMAIL_BODY=$(echo "$SEARCH_EMAIL_RESP" | sed '$d')
+check_status 200 "$SEARCH_EMAIL_HTTP" "Search by Email"
+check_body_contains "$SEARCH_EMAIL_BODY" "doctor@medical.com" "Found by email"
+
+# ──────────────────────────────────────────────
+echo -e "\n${YELLOW}[13] Search by Role${NC}"
+SEARCH_ROLE_RESP=$(curl -s -w "\n%{http_code}" "$BASE_URL/api/users/search/role/PATIENT" 2>/dev/null || echo "000")
+SEARCH_ROLE_HTTP=$(echo "$SEARCH_ROLE_RESP" | tail -1)
+SEARCH_ROLE_BODY=$(echo "$SEARCH_ROLE_RESP" | sed '$d')
+check_status 200 "$SEARCH_ROLE_HTTP" "Search by Role"
+check_body_contains "$SEARCH_ROLE_BODY" "PATIENT" "Found patients"
+
+# ──────────────────────────────────────────────
+echo -e "\n${YELLOW}[14] Search by Status (Active)${NC}"
+SEARCH_ACTIVE_RESP=$(curl -s -w "\n%{http_code}" "$BASE_URL/api/users/search/status?active=true" 2>/dev/null || echo "000")
+SEARCH_ACTIVE_HTTP=$(echo "$SEARCH_ACTIVE_RESP" | tail -1)
+SEARCH_ACTIVE_BODY=$(echo "$SEARCH_ACTIVE_RESP" | sed '$d')
+check_status 200 "$SEARCH_ACTIVE_HTTP" "Search Active Users"
+
+# ──────────────────────────────────────────────
+echo -e "\n${YELLOW}[15] Advanced Search${NC}"
+SEARCH_ADV_RESP=$(curl -s -w "\n%{http_code}" "$BASE_URL/api/users/search/advanced?role=ADMIN&active=true" 2>/dev/null || echo "000")
+SEARCH_ADV_HTTP=$(echo "$SEARCH_ADV_RESP" | tail -1)
+SEARCH_ADV_BODY=$(echo "$SEARCH_ADV_RESP" | sed '$d')
+check_status 200 "$SEARCH_ADV_HTTP" "Advanced Search"
+check_body_contains "$SEARCH_ADV_BODY" "ADMIN" "Found admins"
+
+# ──────────────────────────────────────────────
+echo -e "\n${YELLOW}[16] Create Duplicate Username (should fail)${NC}"
 DUP_RESP=$(curl -s -w "\n%{http_code}" -X POST "$BASE_URL/api/users" \
     -H "Content-Type: application/json" \
     -d '{
@@ -181,7 +220,7 @@ check_status 400 "$DUP_HTTP" "Duplicate username rejected"
 check_body_contains "$DUP_BODY" "already exists" "Error message"
 
 # ──────────────────────────────────────────────
-echo -e "\n${YELLOW}[12] Weak Password (should fail)${NC}"
+echo -e "\n${YELLOW}[17] Weak Password (should fail)${NC}"
 WEAK_RESP=$(curl -s -w "\n%{http_code}" -X POST "$BASE_URL/api/users" \
     -H "Content-Type: application/json" \
     -d '{

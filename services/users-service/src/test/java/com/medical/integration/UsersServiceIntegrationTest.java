@@ -238,4 +238,110 @@ class UsersServiceIntegrationTest {
     assertEquals(HttpStatus.BAD_REQUEST, secondDeact.getStatusCode());
     assertTrue(secondDeact.getBody().contains("already inactive"));
   }
+
+  // ──────────────────────────────────────────────
+  // Search integration tests
+  // ──────────────────────────────────────────────
+
+  @Test
+  void shouldSearchByUsername() {
+    Long userId = createUser("srch");
+
+    ResponseEntity<String> response = restTemplate.getForEntity(
+        url("/api/users/search/username/srch." + suffix), String.class);
+
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertTrue(response.getBody().contains("srch." + suffix));
+  }
+
+  @Test
+  void shouldReturnEmpty_whenSearchingNonExistentUsername() {
+    ResponseEntity<String> response = restTemplate.getForEntity(
+        url("/api/users/search/username/nonexistent_xyz"), String.class);
+
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertEquals("[]", response.getBody());
+  }
+
+  @Test
+  void shouldSearchByEmail() {
+    Long userId = createUser("srchemail");
+
+    ResponseEntity<String> response = restTemplate.getForEntity(
+        url("/api/users/search/email/srchemail." + suffix + "@test.com"), String.class);
+
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertTrue(response.getBody().contains("srchemail." + suffix));
+  }
+
+  @Test
+  void shouldSearchByRole() {
+    createUser("role1");
+
+    ResponseEntity<String> response = restTemplate.getForEntity(
+        url("/api/users/search/role/SCHEDULER"), String.class);
+
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertTrue(response.getBody().contains("SCHEDULER"));
+  }
+
+  @Test
+  void shouldReturn400_whenSearchingByInvalidRole() {
+    ResponseEntity<String> response = restTemplate.getForEntity(
+        url("/api/users/search/role/INVALID"), String.class);
+
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+  }
+
+  @Test
+  void shouldSearchActiveUsers() {
+    createUser("act1");
+
+    ResponseEntity<String> response = restTemplate.getForEntity(
+        url("/api/users/search/status?active=true"), String.class);
+
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertTrue(response.getBody().contains("act1." + suffix));
+  }
+
+  @Test
+  void shouldSearchByStatusInactive() {
+    Long userId = createUser("inact1");
+    // Deactivate the user first
+    restTemplate.exchange(url("/api/users/" + userId + "/deactivate"), HttpMethod.PATCH, null, Void.class);
+
+    ResponseEntity<String> response = restTemplate.getForEntity(
+        url("/api/users/search/status?active=false"), String.class);
+
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertTrue(response.getBody().contains("inact1." + suffix));
+  }
+
+  @Test
+  void shouldReturn400_whenStatusParamMissing() {
+    ResponseEntity<String> response = restTemplate.getForEntity(
+        url("/api/users/search/status"), String.class);
+
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+  }
+
+  @Test
+  void shouldSearchAdvancedWithMultipleParams() {
+    createUser("adv1");
+
+    // Search by role (SCHEDULER) which is what createUser uses
+    ResponseEntity<String> response = restTemplate.getForEntity(
+        url("/api/users/search/advanced?role=SCHEDULER"), String.class);
+
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertTrue(response.getBody().contains("adv1." + suffix));
+  }
+
+  @Test
+  void shouldReturn400_whenAdvancedSearchWithInvalidRole() {
+    ResponseEntity<String> response = restTemplate.getForEntity(
+        url("/api/users/search/advanced?role=INVALID"), String.class);
+
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+  }
 }

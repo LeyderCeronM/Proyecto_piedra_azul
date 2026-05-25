@@ -3,6 +3,7 @@ package com.medical.controller;
 import com.medical.dto.CreateUserRequest;
 import com.medical.dto.UpdateUserRequest;
 import com.medical.dto.UserResponse;
+import com.medical.enums.UserRole;
 import com.medical.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -74,6 +75,76 @@ public class UserController {
   public ResponseEntity<Void> deactivateUser(@PathVariable Long id) {
     userService.deactivateUser(id);
     return ResponseEntity.noContent().build();
+  }
+
+  // ──────────────────────────────────────────────
+  // Search endpoints
+  // ──────────────────────────────────────────────
+
+  /**
+   * Search users by exact username.
+   * GET /api/users/search/username/{username}
+   */
+  @GetMapping("/search/username/{username}")
+  public ResponseEntity<List<UserResponse>> searchByUsername(@PathVariable String username) {
+    return ResponseEntity.ok(userService.searchByUsername(username));
+  }
+
+  /**
+   * Search users by exact email.
+   * GET /api/users/search/email/{email}
+   */
+  @GetMapping("/search/email/{email}")
+  public ResponseEntity<List<UserResponse>> searchByEmail(@PathVariable String email) {
+    return ResponseEntity.ok(userService.searchByEmail(email));
+  }
+
+  /**
+   * Search users by role.
+   * GET /api/users/search/role/{role}
+   */
+  @GetMapping("/search/role/{role}")
+  public ResponseEntity<List<UserResponse>> searchByRole(@PathVariable String role) {
+    try {
+      UserRole userRole = UserRole.valueOf(role.toUpperCase());
+      return ResponseEntity.ok(userService.searchByRole(userRole));
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.badRequest().build();
+    }
+  }
+
+  /**
+   * Search users by active status.
+   * GET /api/users/search/status?active=true|false
+   */
+  @GetMapping("/search/status")
+  public ResponseEntity<List<UserResponse>> searchByStatus(@RequestParam Boolean active) {
+    if (active == null) {
+      return ResponseEntity.badRequest().build();
+    }
+    return ResponseEntity.ok(userService.searchByStatus(active));
+  }
+
+  /**
+   * Advanced search with any combination of filters.
+   * GET /api/users/search/advanced?username=X&email=Y&role=Z&active=true
+   */
+  @GetMapping("/search/advanced")
+  public ResponseEntity<List<UserResponse>> searchAdvanced(
+      @RequestParam(required = false) String username,
+      @RequestParam(required = false) String email,
+      @RequestParam(required = false) String role,
+      @RequestParam(required = false) Boolean active) {
+
+    UserRole userRole = null;
+    if (role != null) {
+      try {
+        userRole = UserRole.valueOf(role.toUpperCase());
+      } catch (IllegalArgumentException e) {
+        return ResponseEntity.badRequest().build();
+      }
+    }
+    return ResponseEntity.ok(userService.searchAdvanced(username, email, userRole, active));
   }
 
   /**

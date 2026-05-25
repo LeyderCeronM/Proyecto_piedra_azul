@@ -538,4 +538,204 @@ class UserServiceTest {
     assertFalse(admin.getActive());
     verify(userRepository, times(1)).save(admin);
   }
+
+  // ──────────────────────────────────────────────
+  // Phase: Search by username
+  // ──────────────────────────────────────────────
+
+  @Test
+  void shouldReturnUsers_whenSearchingByExistingUsername() {
+    // Given
+    User user = User.builder()
+        .id(1L).username("jdoe").passwordHash("hash")
+        .email("jdoe@example.com").role(UserRole.PATIENT).active(true)
+        .build();
+    when(userRepository.findAllByUsername("jdoe")).thenReturn(List.of(user));
+
+    // When
+    List<UserResponse> result = userService.searchByUsername("jdoe");
+
+    // Then
+    assertEquals(1, result.size());
+    assertEquals("jdoe", result.get(0).getUsername());
+    verify(userRepository).findAllByUsername("jdoe");
+  }
+
+  @Test
+  void shouldReturnEmptyList_whenSearchingByNonExistentUsername() {
+    // Given
+    when(userRepository.findAllByUsername("unknown")).thenReturn(List.of());
+
+    // When
+    List<UserResponse> result = userService.searchByUsername("unknown");
+
+    // Then
+    assertTrue(result.isEmpty());
+    verify(userRepository).findAllByUsername("unknown");
+  }
+
+  // ──────────────────────────────────────────────
+  // Phase: Search by email
+  // ──────────────────────────────────────────────
+
+  @Test
+  void shouldReturnUsers_whenSearchingByExistingEmail() {
+    // Given
+    User user = User.builder()
+        .id(1L).username("jdoe").passwordHash("hash")
+        .email("jdoe@example.com").role(UserRole.PATIENT).active(true)
+        .build();
+    when(userRepository.findAllByEmail("jdoe@example.com")).thenReturn(List.of(user));
+
+    // When
+    List<UserResponse> result = userService.searchByEmail("jdoe@example.com");
+
+    // Then
+    assertEquals(1, result.size());
+    assertEquals("jdoe@example.com", result.get(0).getEmail());
+    verify(userRepository).findAllByEmail("jdoe@example.com");
+  }
+
+  @Test
+  void shouldReturnEmptyList_whenSearchingByNonExistentEmail() {
+    // Given
+    when(userRepository.findAllByEmail("unknown@example.com")).thenReturn(List.of());
+
+    // When
+    List<UserResponse> result = userService.searchByEmail("unknown@example.com");
+
+    // Then
+    assertTrue(result.isEmpty());
+    verify(userRepository).findAllByEmail("unknown@example.com");
+  }
+
+  // ──────────────────────────────────────────────
+  // Phase: Search by role
+  // ──────────────────────────────────────────────
+
+  @Test
+  void shouldReturnUsers_whenSearchingByRole() {
+    // Given
+    User user = User.builder()
+        .id(1L).username("alice").passwordHash("hash")
+        .email("alice@example.com").role(UserRole.ADMIN).active(true)
+        .build();
+    when(userRepository.findByRole(UserRole.ADMIN)).thenReturn(List.of(user));
+
+    // When
+    List<UserResponse> result = userService.searchByRole(UserRole.ADMIN);
+
+    // Then
+    assertEquals(1, result.size());
+    assertEquals(UserRole.ADMIN, result.get(0).getRole());
+    verify(userRepository).findByRole(UserRole.ADMIN);
+  }
+
+  @Test
+  void shouldReturnEmptyList_whenNoUsersWithGivenRole() {
+    // Given
+    when(userRepository.findByRole(UserRole.SCHEDULER)).thenReturn(List.of());
+
+    // When
+    List<UserResponse> result = userService.searchByRole(UserRole.SCHEDULER);
+
+    // Then
+    assertTrue(result.isEmpty());
+    verify(userRepository).findByRole(UserRole.SCHEDULER);
+  }
+
+  // ──────────────────────────────────────────────
+  // Phase: Search by status (active/inactive)
+  // ──────────────────────────────────────────────
+
+  @Test
+  void shouldReturnActiveUsers_whenSearchingByActiveTrue() {
+    // Given
+    User user = User.builder()
+        .id(1L).username("activeuser").passwordHash("hash")
+        .email("active@example.com").role(UserRole.PATIENT).active(true)
+        .build();
+    when(userRepository.findByActive(true)).thenReturn(List.of(user));
+
+    // When
+    List<UserResponse> result = userService.searchByStatus(true);
+
+    // Then
+    assertEquals(1, result.size());
+    assertTrue(result.get(0).getActive());
+    verify(userRepository).findByActive(true);
+  }
+
+  @Test
+  void shouldReturnInactiveUsers_whenSearchingByActiveFalse() {
+    // Given
+    User user = User.builder()
+        .id(1L).username("inactiveuser").passwordHash("hash")
+        .email("inactive@example.com").role(UserRole.PATIENT).active(false)
+        .build();
+    when(userRepository.findByActive(false)).thenReturn(List.of(user));
+
+    // When
+    List<UserResponse> result = userService.searchByStatus(false);
+
+    // Then
+    assertEquals(1, result.size());
+    assertFalse(result.get(0).getActive());
+    verify(userRepository).findByActive(false);
+  }
+
+  // ──────────────────────────────────────────────
+  // Phase: Advanced combined search
+  // ──────────────────────────────────────────────
+
+  @Test
+  void shouldReturnFilteredUsers_whenAdvancedSearchWithMultipleParams() {
+    // Given
+    User user = User.builder()
+        .id(1L).username("jdoe").passwordHash("hash")
+        .email("jdoe@example.com").role(UserRole.PATIENT).active(true)
+        .build();
+    when(userRepository.findAll(any(org.springframework.data.jpa.domain.Specification.class)))
+        .thenReturn(List.of(user));
+
+    // When
+    List<UserResponse> result = userService.searchAdvanced("jdoe", "jdoe@example.com", UserRole.PATIENT, true);
+
+    // Then
+    assertEquals(1, result.size());
+    assertEquals("jdoe", result.get(0).getUsername());
+    verify(userRepository).findAll(any(org.springframework.data.jpa.domain.Specification.class));
+  }
+
+  @Test
+  void shouldReturnAllUsers_whenAdvancedSearchWithNoParams() {
+    // Given
+    User user = User.builder()
+        .id(1L).username("user1").passwordHash("hash")
+        .email("user1@example.com").role(UserRole.ADMIN).active(true)
+        .build();
+    when(userRepository.findAll(any(org.springframework.data.jpa.domain.Specification.class)))
+        .thenReturn(List.of(user));
+
+    // When
+    List<UserResponse> result = userService.searchAdvanced(null, null, null, null);
+
+    // Then
+    assertEquals(1, result.size());
+    verify(userRepository).findAll(any(org.springframework.data.jpa.domain.Specification.class));
+  }
+
+  @Test
+  void shouldReturnEmptyList_whenAdvancedSearchNoMatches() {
+    // Given
+    when(userRepository.findAll(any(org.springframework.data.jpa.domain.Specification.class)))
+        .thenReturn(List.of());
+
+    // When
+    List<UserResponse> result = userService.searchAdvanced("nonexistent", null, null, null);
+
+    // Then
+    assertTrue(result.isEmpty());
+    verify(userRepository).findAll(any(org.springframework.data.jpa.domain.Specification.class));
+  }
 }
