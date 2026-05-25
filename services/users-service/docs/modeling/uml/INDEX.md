@@ -25,7 +25,8 @@ docs/modeling/uml/
 │   ├── ConfigSecurity.png
 │   ├── SequenceCreateUser.png
 │   ├── SequencePatientValidation.png
-│   └── SequenceDeactivateUser.png
+│   ├── SequenceDeactivateUser.png
+│   └── SequenceSearchUsers.png
 ├── entities/                       # com.medical.entities
 │   └── 01-relations.puml           # User, Patient, Professional
 ├── enums/                          # com.medical.enums
@@ -50,7 +51,8 @@ docs/modeling/uml/
 └── sequences/                      # Flow diagrams
     ├── 01-create-user.puml         # User creation with Strategy Pattern
     ├── 02-patient-validation.puml  # Async patient validation via RabbitMQ
-    └── 03-deactivate-user.puml     # User deactivation with admin guard
+    ├── 03-deactivate-user.puml     # User deactivation with admin guard
+    └── 04-search-users.puml        # User search with JPA Specification
 ```
 
 ## 📋 Diagram Types
@@ -118,9 +120,9 @@ client → controller → service → factory → entities
 | ![RepositoryRelations](diagrams/RepositoryRelations.png) | ![MessengerRelations](diagrams/MessengerRelations.png) | ![ConfigSecurity](diagrams/ConfigSecurity.png) |
 
 ### Sequence Diagrams
-| Create User (Strategy Pattern) | Patient Validation (RabbitMQ) | Deactivate User (Admin Guard) |
-|-------------------------------|-------------------------------|-------------------------------|
-| ![SequenceCreateUser](diagrams/SequenceCreateUser.png) | ![SequencePatientValidation](diagrams/SequencePatientValidation.png) | ![SequenceDeactivateUser](diagrams/SequenceDeactivateUser.png) |
+| Create User (Strategy Pattern) | Patient Validation (RabbitMQ) | Deactivate User (Admin Guard) | Search Users |
+|-------------------------------|-------------------------------|-------------------------------|--------------|
+| ![SequenceCreateUser](diagrams/SequenceCreateUser.png) | ![SequencePatientValidation](diagrams/SequencePatientValidation.png) | ![SequenceDeactivateUser](diagrams/SequenceDeactivateUser.png) | ![SequenceSearchUsers](diagrams/SequenceSearchUsers.png) |
 
 ## 🖼️ Regenerar PNG
 

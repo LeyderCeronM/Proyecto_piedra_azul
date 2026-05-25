@@ -21,6 +21,12 @@ class UserService <<service>> #90EE90;line:Black {
   +validatePatientByDocument(String documentNumber): boolean
   +getPatientByDocument(String documentNumber): Optional<Patient>
   ..
+  +searchByUsername(String username): List<UserResponse>
+  +searchByEmail(String email): List<UserResponse>
+  +searchByRole(UserRole role): List<UserResponse>
+  +searchByStatus(Boolean active): List<UserResponse>
+  +searchAdvanced(String username, String email, UserRole role, Boolean active): List<UserResponse>
+  ..
   -validatePassword(String password): void
   -mapToResponse(User user): UserResponse
 }

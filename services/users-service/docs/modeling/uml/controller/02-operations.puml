@@ -17,6 +17,12 @@ class UserController <<controller>> #87CEEB;line:Black {
   {method} +{static} deactivateUser(Long id): ResponseEntity<Void> [PATCH /api/users/{id}/deactivate]
   {method} +{static} validatePatient(String documentNumber): ResponseEntity<Boolean> [GET /api/users/patients/validate/{documentNumber}]
   ..
+  {method} +{static} searchByUsername(String username): ResponseEntity<List<UserResponse>> [GET /api/users/search/username/{username}]
+  {method} +{static} searchByEmail(String email): ResponseEntity<List<UserResponse>> [GET /api/users/search/email/{email}]
+  {method} +{static} searchByRole(String role): ResponseEntity<List<UserResponse>> [GET /api/users/search/role/{role}]
+  {method} +{static} searchByStatus(Boolean active): ResponseEntity<List<UserResponse>> [GET /api/users/search/status?active=]
+  {method} +{static} searchAdvanced(String username, String email, String role, Boolean active): ResponseEntity<List<UserResponse>> [GET /api/users/search/advanced]
+  ..
   {method} +handleIllegalArgument(IllegalArgumentException ex): ResponseEntity<String> [@ExceptionHandler]
 }
 

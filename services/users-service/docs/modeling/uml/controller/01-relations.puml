@@ -34,11 +34,10 @@ UserController ..> UserResponse : "returns @ResponseBody"
 
 note bottom of UserController
   **Controlador REST**
-  Expone los endpoints para el
-  manejo de usuarios.
+  Expone endpoints CRUD + busqueda
+  por username, email, role, status,
+  y busqueda combinada avanzada.
   Ruta base: /api/users
-  Maneja IllegalArgumentException
-  con @ExceptionHandler.
 end note
 
 @enduml

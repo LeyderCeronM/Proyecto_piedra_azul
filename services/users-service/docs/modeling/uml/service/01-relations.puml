@@ -55,10 +55,11 @@ note bottom of UserService
   **UserService**
   Orquesta la creacion, actualizacion,
   desactivacion y consulta de usuarios.
-  Las validaciones transversales
-  (username/email unicos, password policy)
-  estan aqui. La creacion especifica
-  por rol se delega al Factory.
+  Incluye busqueda por username, email,
+  role, estado, y busqueda combinada
+  via JPA Specifications. Las validaciones
+  transversales (username/email unicos,
+  password policy) estan aqui.
 end note
 
 @enduml
