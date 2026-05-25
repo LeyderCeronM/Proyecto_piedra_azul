@@ -25,7 +25,7 @@
 
 ## Descripción
 
-Microservicio de gestión de usuarios para el sistema de agendamiento de citas médicas del **Centro de Salud Piedra Azul**. Administra el ciclo de vida completo de los usuarios del sistema: creación, consulta, actualización y desactivación, con roles y permisos diferenciados.
+Microservicio de gestión de usuarios para el sistema de agendamiento de citas médicas del **Centro de Salud Piedra Azul**. Administra el ciclo de vida completo de los usuarios del sistema: creación, consulta, búsqueda, actualización y desactivación, con roles y permisos diferenciados.
 
 Este servicio implementa las user stories del **Epic E1 — Manage Users** y utiliza autenticación por roles (ADMIN, SCHEDULER, PATIENT, PROFESSIONAL).
 
@@ -175,6 +175,11 @@ Puerto por defecto: **8081**.
 | `PUT` | `/api/users/{id}` | Actualizar usuario | `200`, `400` |
 | `PATCH` | `/api/users/{id}/deactivate` | Desactivar usuario | `204`, `400` |
 | `GET` | `/api/users/patients/validate/{docNumber}` | Validar paciente por documento | `200` |
+| `GET` | `/api/users/search/username/{username}` | Buscar por username | `200` |
+| `GET` | `/api/users/search/email/{email}` | Buscar por email | `200` |
+| `GET` | `/api/users/search/role/{role}` | Buscar por rol | `200`, `400` |
+| `GET` | `/api/users/search/status?active=true\|false` | Buscar por estado activo/inactivo | `200`, `400` |
+| `GET` | `/api/users/search/advanced?username=&email=&role=&active=` | Búsqueda combinada (AND) | `200`, `400` |
 | `GET` | `/actuator/health` | Health check | `200`, `503` |
 
 > Para ejemplos completos de request/response, ver [`docs/postman-collection.md`](docs/postman-collection.md).
@@ -238,6 +243,18 @@ Puerto por defecto: **8081**.
 | Usuario no existe | ✅ Cubierto |
 | Usuario ya inactivo | ✅ Cubierto |
 
+### Search — Búsqueda de Usuarios
+
+| Escenario | Estado |
+|-----------|--------|
+| Búsqueda por username (exacto) | ✅ Cubierto |
+| Búsqueda por email (exacto) | ✅ Cubierto |
+| Búsqueda por rol | ✅ Cubierto |
+| Búsqueda por estado activo/inactivo | ✅ Cubierto |
+| Búsqueda combinada (username + email + rol + estado) | ✅ Cubierto |
+| Rol inválido retorna 400 | ✅ Cubierto |
+| Parámetro faltante retorna 400 | ✅ Cubierto |
+
 ---
 
 ## Pruebas
@@ -259,10 +276,10 @@ mvn test -Dtest="com.medical.integration.UsersServiceIntegrationTest"
 
 | Tipo | Tests | Pasan | Saltados |
 |------|:-----:|:-----:|:--------:|
-| Unit (service) | 19 | 19 | 2 |
+| Unit (service) | 30 | 30 | 2 |
 | Unit (factory) | 16 | 16 | 0 |
-| Integration | 9 | 9 | 0 |
-| **Total** | **44** | **44** | **2** |
+| Integration | 19 | 19 | 0 |
+| **Total** | **65** | **65** | **2** |
 
 > Los 2 tests saltados corresponden a escenarios pendientes de integración con `professionals-service`.
 
