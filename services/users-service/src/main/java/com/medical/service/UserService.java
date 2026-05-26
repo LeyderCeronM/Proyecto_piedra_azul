@@ -5,11 +5,13 @@ import com.medical.dto.UpdateUserRequest;
 import com.medical.dto.UserResponse;
 import com.medical.entities.User;
 import com.medical.entities.Patient;
+import com.medical.entities.Professional;
 import com.medical.enums.UserRole;
 import com.medical.factory.UserCreationFactory;
 import com.medical.factory.IUserCreationStrategy;
 import com.medical.repository.IUserRepository;
 import com.medical.repository.IPatientRepository;
+import com.medical.repository.IProfessionalRepository;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -31,6 +33,7 @@ public class UserService {
 
   private final IUserRepository userRepository;
   private final IPatientRepository patientRepository;
+  private final IProfessionalRepository professionalRepository;
   private final PasswordEncoder passwordEncoder;
   private final UserCreationFactory creationFactory;
 
@@ -94,18 +97,40 @@ public class UserService {
   }
 
   /**
-   * Map user entity to response DTO.
+   * Map user entity to response DTO, enriching with role-specific data.
    */
   private UserResponse mapToResponse(User user) {
-    return UserResponse.builder()
+    UserResponse.UserResponseBuilder builder = UserResponse.builder()
         .id(user.getId())
         .username(user.getUsername())
         .email(user.getEmail())
         .role(user.getRole())
         .active(user.getActive())
         .createdAt(user.getCreatedAt())
-        .updatedAt(user.getUpdatedAt())
-        .build();
+        .updatedAt(user.getUpdatedAt());
+
+    if (user.getRole() == UserRole.PATIENT) {
+      patientRepository.findByUserId(user.getId()).ifPresent(patient -> {
+        builder.firstName(patient.getFirstName())
+            .lastName(patient.getLastName())
+            .documentType(patient.getDocumentType())
+            .documentNumber(patient.getDocumentNumber())
+            .birthDate(patient.getBirthDate())
+            .phone(patient.getPhone())
+            .address(patient.getAddress())
+            .eps(patient.getEps());
+      });
+    } else if (user.getRole() == UserRole.PROFESSIONAL) {
+      professionalRepository.findByUserId(user.getId()).ifPresent(prof -> {
+        builder.firstName(prof.getFirstName())
+            .lastName(prof.getLastName())
+            .specialty(prof.getSpecialty())
+            .licenseNumber(prof.getLicenseNumber())
+            .phone(prof.getPhone());
+      });
+    }
+
+    return builder.build();
   }
 
   /**

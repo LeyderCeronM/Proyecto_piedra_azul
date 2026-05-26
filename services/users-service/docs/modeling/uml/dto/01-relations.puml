@@ -21,6 +21,12 @@ package "com.medical.dto" as dtoPkg #F0F0F0 {
     {field} -lastName: String
     {field} -specialty: String
     {field} -licenseNumber: String
+    {field} -documentType: String
+    {field} -documentNumber: String
+    {field} -birthDate: LocalDate
+    {field} -phone: String
+    {field} -address: String
+    {field} -eps: String
   }
 
   class CreateUserRequest <<dto>> #E0FFFF;line:Black {

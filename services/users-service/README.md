@@ -177,10 +177,12 @@ Puerto por defecto: **8081**.
 | `GET` | `/api/users/patients/validate/{docNumber}` | Validar paciente por documento | `200` |
 | `GET` | `/api/users/search/username/{username}` | Buscar por username | `200` |
 | `GET` | `/api/users/search/email/{email}` | Buscar por email | `200` |
-| `GET` | `/api/users/search/role/{role}` | Buscar por rol | `200`, `400` |
+| `GET` | `/api/users/search/role/{role}` | Buscar por rol (con datos enriquecidos para PATIENT/PROFESSIONAL) | `200`, `400` |
 | `GET` | `/api/users/search/status?active=true\|false` | Buscar por estado activo/inactivo | `200`, `400` |
 | `GET` | `/api/users/search/advanced?username=&email=&role=&active=` | Búsqueda combinada (AND) | `200`, `400` |
 | `GET` | `/actuator/health` | Health check | `200`, `503` |
+
+> **Nota:** Los endpoints que devuelven `UserResponse` incluyen ahora datos enriquecidos para roles `PATIENT` y `PROFESSIONAL` (firstName, lastName, documentType, documentNumber, birthDate, phone, address, eps para pacientes; firstName, lastName, specialty, licenseNumber, phone para profesionales). Los roles `ADMIN` y `SCHEDULER` solo reciben campos base.
 
 > Para ejemplos completos de request/response, ver [`docs/postman-collection.md`](docs/postman-collection.md).
 
@@ -254,6 +256,11 @@ Puerto por defecto: **8081**.
 | Búsqueda combinada (username + email + rol + estado) | ✅ Cubierto |
 | Rol inválido retorna 400 | ✅ Cubierto |
 | Parámetro faltante retorna 400 | ✅ Cubierto |
+| Respuesta enriquecida con datos de Patient para rol PATIENT | ✅ Cubierto |
+| Respuesta enriquecida con datos de Professional para rol PROFESSIONAL | ✅ Cubierto |
+| Roles ADMIN/SCHEDULER retornan solo campos base | ✅ Cubierto |
+
+> **Enriquecimiento de respuesta:** Los endpoints que devuelven `UserResponse` cargan automáticamente los datos de la entidad `Patient` o `Professional` asociada cuando el rol es PATIENT o PROFESSIONAL respectivamente. Esto aplica a todos los endpoints de consulta (getAllUsers, getUserById, searchByUsername, searchByEmail, searchByRole, searchByStatus, searchAdvanced). Si no existen datos asociados (inconsistencia), se retornan los campos enriquecidos como `null` sin lanzar excepción.
 
 ---
 
@@ -276,10 +283,10 @@ mvn test -Dtest="com.medical.integration.UsersServiceIntegrationTest"
 
 | Tipo | Tests | Pasan | Saltados |
 |------|:-----:|:-----:|:--------:|
-| Unit (service) | 30 | 30 | 2 |
+| Unit (service) | 36 | 36 | 2 |
 | Unit (factory) | 16 | 16 | 0 |
 | Integration | 19 | 19 | 0 |
-| **Total** | **65** | **65** | **2** |
+| **Total** | **71** | **71** | **2** |
 
 > Los 2 tests saltados corresponden a escenarios pendientes de integración con `professionals-service`.
 

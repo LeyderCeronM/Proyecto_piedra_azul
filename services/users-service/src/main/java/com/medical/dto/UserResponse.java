@@ -1,6 +1,7 @@
 package com.medical.dto;
 
 import lombok.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.medical.enums.UserRole;
@@ -27,4 +28,12 @@ public class UserResponse {
   private String lastName;
   private String specialty; // Only for PROFESSIONAL
   private String licenseNumber; // Only for PROFESSIONAL
+
+  // Patient-specific fields
+  private String documentType;
+  private String documentNumber;
+  private LocalDate birthDate;
+  private String phone;
+  private String address;
+  private String eps;
 }

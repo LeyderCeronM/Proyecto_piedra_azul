@@ -24,7 +24,12 @@ package "com.medical.repository" as repoPkg #F0F0F0 {
 
   interface IPatientRepository <<interface>> #F0F8FF;line:blue {
     {method} +findByDocumentNumber(String): Optional<Patient>
+    {method} +findByUserId(Long): Optional<Patient>
     {method} +existsByDocumentNumber(String): boolean
+  }
+
+  interface IProfessionalRepository <<interface>> #F0F8FF;line:blue {
+    {method} +findByUserId(Long): Optional<Professional>
   }
 
 }
@@ -32,6 +37,7 @@ package "com.medical.repository" as repoPkg #F0F0F0 {
 package "com.medical.entities" as entityPkg #F0F0F0 {
   class User <<entity>> #FFFACD;line:Black
   class Patient <<entity>> #FFFACD;line:Black
+  class Professional <<entity>> #FFFACD;line:Black
 }
 
 package "org.springframework.data.jpa.repository" as jpaPkg #F0F0F0 {
@@ -43,10 +49,12 @@ package "org.springframework.data.jpa.repository" as jpaPkg #F0F0F0 {
 JpaRepository <|-- IUserRepository : "extends"
 JpaSpecificationExecutor <|-- IUserRepository : "extends"
 JpaRepository <|-- IPatientRepository : "extends"
+JpaRepository <|-- IProfessionalRepository : "extends"
 
 ' === USAGE ===
 IUserRepository "1" --> "1" User : "manages"
 IPatientRepository "1" --> "1" Patient : "manages"
+IProfessionalRepository "1" --> "1" Professional : "manages"
 
 note bottom of IUserRepository
   **Repositorio de Usuarios**
@@ -61,7 +69,16 @@ note bottom of IPatientRepository
   **Repositorio de Pacientes**
   Busqueda por numero de
   documento para validacion
-  asincronica (RabbitMQ).
+  asincronica (RabbitMQ) y
+  por userId para enriquecer
+  UserResponse.
+end note
+
+note bottom of IProfessionalRepository
+  **Repositorio de Profesionales**
+  Busqueda por userId para
+  enriquecer UserResponse
+  con datos del profesional.
 end note
 
 @enduml

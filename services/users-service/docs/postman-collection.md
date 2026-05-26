@@ -86,12 +86,20 @@ Roles disponibles: `ADMIN`, `SCHEDULER`, `PATIENT`, `PROFESSIONAL`.
   "active": true,
   "createdAt": "2026-05-22T10:30:00",
   "updatedAt": "2026-05-22T10:30:00",
-  "firstName": null,
-  "lastName": null,
+  "firstName": "Juan",
+  "lastName": "Pérez",
   "specialty": null,
-  "licenseNumber": null
+  "licenseNumber": null,
+  "documentType": "CC",
+  "documentNumber": "1234567890",
+  "birthDate": null,
+  "phone": "3001234567",
+  "address": "Calle 123 #45-67",
+  "eps": "Nueva EPS"
 }
 ```
+
+> Los datos del paciente se cargan automáticamente desde la entidad `Patient` asociada. Si el rol es `PROFESSIONAL`, se incluyen `specialty`, `licenseNumber` y `phone`.
 
 ---
 
@@ -111,13 +119,21 @@ Roles disponibles: `ADMIN`, `SCHEDULER`, `PATIENT`, `PROFESSIONAL`.
     "active": true,
     "createdAt": "2026-05-22T10:30:00",
     "updatedAt": "2026-05-22T10:30:00",
-    "firstName": null,
-    "lastName": null,
+    "firstName": "Juan",
+    "lastName": "Pérez",
     "specialty": null,
-    "licenseNumber": null
+    "licenseNumber": null,
+    "documentType": "CC",
+    "documentNumber": "1234567890",
+    "birthDate": null,
+    "phone": "3001234567",
+    "address": "Calle 123 #45-67",
+    "eps": "Nueva EPS"
   }
 ]
 ```
+
+> Los datos del paciente se cargan automáticamente. Para roles `ADMIN` o `SCHEDULER` los campos de extensión son `null`.
 
 ---
 
@@ -125,7 +141,7 @@ Roles disponibles: `ADMIN`, `SCHEDULER`, `PATIENT`, `PROFESSIONAL`.
 
 > **`GET /api/users/{id}`**
 
-**Response — `200 OK`:**
+**Response — `200 OK`** (PATIENT):
 
 ```json
 {
@@ -136,10 +152,40 @@ Roles disponibles: `ADMIN`, `SCHEDULER`, `PATIENT`, `PROFESSIONAL`.
   "active": true,
   "createdAt": "2026-05-22T10:30:00",
   "updatedAt": "2026-05-22T10:30:00",
-  "firstName": null,
-  "lastName": null,
+  "firstName": "Juan",
+  "lastName": "Pérez",
   "specialty": null,
-  "licenseNumber": null
+  "licenseNumber": null,
+  "documentType": "CC",
+  "documentNumber": "1234567890",
+  "birthDate": null,
+  "phone": "3001234567",
+  "address": "Calle 123 #45-67",
+  "eps": "Nueva EPS"
+}
+```
+
+**Response — `200 OK`** (PROFESSIONAL):
+
+```json
+{
+  "id": 2,
+  "username": "dralopez",
+  "email": "lopez@medical.com",
+  "role": "PROFESSIONAL",
+  "active": true,
+  "createdAt": "2026-05-22T10:30:00",
+  "updatedAt": "2026-05-22T10:30:00",
+  "firstName": "María",
+  "lastName": "López",
+  "specialty": "Neuralterapia",
+  "licenseNumber": "LIC-2024-001",
+  "phone": "3109876543",
+  "documentType": null,
+  "documentNumber": null,
+  "birthDate": null,
+  "address": null,
+  "eps": null
 }
 ```
 
@@ -177,10 +223,16 @@ Todos los campos son opcionales — solo se actualizan los que se envían.
   "active": true,
   "createdAt": "2026-05-22T10:30:00",
   "updatedAt": "2026-05-22T10:45:00",
-  "firstName": null,
-  "lastName": null,
+  "firstName": "Juan",
+  "lastName": "Pérez",
   "specialty": null,
-  "licenseNumber": null
+  "licenseNumber": null,
+  "documentType": "CC",
+  "documentNumber": "1234567890",
+  "birthDate": null,
+  "phone": "3001234567",
+  "address": "Calle 123 #45-67",
+  "eps": "Nueva EPS"
 }
 ```
 
@@ -265,6 +317,10 @@ false
 
 > **`GET /api/users/search/role/{role}`**
 > Rol válido: `ADMIN`, `SCHEDULER`, `PATIENT`, `PROFESSIONAL`. Rol inválido → HTTP 400.
+>
+> **Enriquecimiento:** Para rol `PATIENT` la respuesta incluye firstName, lastName, documentType, documentNumber, birthDate, phone, address, eps.
+> Para rol `PROFESSIONAL` incluye firstName, lastName, specialty, licenseNumber, phone.
+> Para `ADMIN`/`SCHEDULER` solo campos base.
 
 ## 10. Buscar por estado
 

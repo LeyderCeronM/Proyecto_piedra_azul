@@ -7,6 +7,9 @@ import com.medical.entities.User;
 import com.medical.enums.UserRole;
 import com.medical.factory.UserCreationFactory;
 import com.medical.factory.IUserCreationStrategy;
+import com.medical.entities.Patient;
+import com.medical.entities.Professional;
+import com.medical.repository.IProfessionalRepository;
 import com.medical.repository.IUserRepository;
 import com.medical.repository.IPatientRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +44,9 @@ class UserServiceTest {
   private IPatientRepository patientRepository;
 
   @Mock
+  private IProfessionalRepository professionalRepository;
+
+  @Mock
   private PasswordEncoder passwordEncoder;
 
   @Mock
@@ -52,7 +59,7 @@ class UserServiceTest {
 
   @BeforeEach
   void setUp() {
-    userService = new UserService(userRepository, patientRepository, passwordEncoder, creationFactory);
+    userService = new UserService(userRepository, patientRepository, professionalRepository, passwordEncoder, creationFactory);
   }
 
   @Test
@@ -737,5 +744,168 @@ class UserServiceTest {
     // Then
     assertTrue(result.isEmpty());
     verify(userRepository).findAll(any(org.springframework.data.jpa.domain.Specification.class));
+  }
+
+  // ──────────────────────────────────────────────
+  // Phase: Role-enriched responses (R1-R4)
+  // ──────────────────────────────────────────────
+
+  @Test
+  void shouldIncludePatientFields_whenSearchingByRolePatient() {
+    // Given
+    User user = User.builder()
+        .id(1L).username("patient1").passwordHash("hash")
+        .email("patient@example.com").role(UserRole.PATIENT).active(true)
+        .build();
+
+    Patient patient = Patient.builder()
+        .id(10L).user(user)
+        .firstName("Carlos").lastName("Mendez")
+        .documentType("CC").documentNumber("12345")
+        .birthDate(LocalDate.of(1990, 5, 15))
+        .phone("3001112233").address("Calle 1 #2-34").eps("Nueva EPS")
+        .build();
+
+    when(userRepository.findByRole(UserRole.PATIENT)).thenReturn(List.of(user));
+    when(patientRepository.findByUserId(1L)).thenReturn(Optional.of(patient));
+
+    // When
+    List<UserResponse> result = userService.searchByRole(UserRole.PATIENT);
+
+    // Then
+    assertEquals(1, result.size());
+    UserResponse resp = result.get(0);
+    assertEquals("Carlos", resp.getFirstName());
+    assertEquals("Mendez", resp.getLastName());
+    assertEquals("CC", resp.getDocumentType());
+    assertEquals("12345", resp.getDocumentNumber());
+    assertEquals("1990-05-15", resp.getBirthDate().toString());
+    assertEquals("3001112233", resp.getPhone());
+    assertEquals("Calle 1 #2-34", resp.getAddress());
+    assertEquals("Nueva EPS", resp.getEps());
+    verify(patientRepository).findByUserId(1L);
+  }
+
+  @Test
+  void shouldIncludeProfessionalFields_whenSearchingByRoleProfessional() {
+    // Given
+    User user = User.builder()
+        .id(2L).username("dr.perez").passwordHash("hash")
+        .email("dr.perez@example.com").role(UserRole.PROFESSIONAL).active(true)
+        .build();
+
+    Professional prof = Professional.builder()
+        .id(20L).user(user)
+        .firstName("Maria").lastName("Perez")
+        .specialty("Neuralterapia").licenseNumber("LIC-001")
+        .phone("3009998877")
+        .build();
+
+    when(userRepository.findByRole(UserRole.PROFESSIONAL)).thenReturn(List.of(user));
+    when(professionalRepository.findByUserId(2L)).thenReturn(Optional.of(prof));
+
+    // When
+    List<UserResponse> result = userService.searchByRole(UserRole.PROFESSIONAL);
+
+    // Then
+    assertEquals(1, result.size());
+    UserResponse resp = result.get(0);
+    assertEquals("Maria", resp.getFirstName());
+    assertEquals("Perez", resp.getLastName());
+    assertEquals("Neuralterapia", resp.getSpecialty());
+    assertEquals("LIC-001", resp.getLicenseNumber());
+    assertEquals("3009998877", resp.getPhone());
+    verify(professionalRepository).findByUserId(2L);
+  }
+
+  @Test
+  void shouldReturnBaseFieldsOnly_whenSearchingByRoleAdmin() {
+    // Given
+    User user = User.builder()
+        .id(3L).username("admin1").passwordHash("hash")
+        .email("admin@example.com").role(UserRole.ADMIN).active(true)
+        .build();
+
+    when(userRepository.findByRole(UserRole.ADMIN)).thenReturn(List.of(user));
+
+    // When
+    List<UserResponse> result = userService.searchByRole(UserRole.ADMIN);
+
+    // Then
+    assertEquals(1, result.size());
+    UserResponse resp = result.get(0);
+    assertEquals("admin1", resp.getUsername());
+    assertNull(resp.getFirstName());
+    assertNull(resp.getLastName());
+    assertNull(resp.getSpecialty());
+    assertNull(resp.getDocumentType());
+    verify(patientRepository, never()).findByUserId(anyLong());
+    verify(professionalRepository, never()).findByUserId(anyLong());
+  }
+
+  @Test
+  void shouldIncludePatientFields_whenGettingUserById() {
+    // Given
+    User user = User.builder()
+        .id(1L).username("patient1").passwordHash("hash")
+        .email("patient@example.com").role(UserRole.PATIENT).active(true)
+        .build();
+
+    Patient patient = Patient.builder()
+        .id(10L).user(user)
+        .firstName("Carlos").lastName("Mendez")
+        .documentType("CC").documentNumber("12345")
+        .build();
+
+    when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+    when(patientRepository.findByUserId(1L)).thenReturn(Optional.of(patient));
+
+    // When
+    UserResponse response = userService.getUserById(1L);
+
+    // Then
+    assertEquals("Carlos", response.getFirstName());
+    assertEquals("CC", response.getDocumentType());
+    verify(patientRepository).findByUserId(1L);
+  }
+
+  @Test
+  void shouldGracefullyHandleMissingPatientData() {
+    // Given — PATIENT user without a Patient record (data inconsistency)
+    User user = User.builder()
+        .id(99L).username("orphan").passwordHash("hash")
+        .email("orphan@example.com").role(UserRole.PATIENT).active(true)
+        .build();
+
+    when(userRepository.findById(99L)).thenReturn(Optional.of(user));
+    when(patientRepository.findByUserId(99L)).thenReturn(Optional.empty());
+
+    // When
+    UserResponse response = userService.getUserById(99L);
+
+    // Then — should return base fields, enrichment fields null, no crash
+    assertEquals("orphan", response.getUsername());
+    assertNull(response.getFirstName());
+    assertNull(response.getDocumentType());
+  }
+
+  @Test
+  void shouldGracefullyHandleMissingProfessionalData() {
+    // Given — PROFESSIONAL user without a Professional record (data inconsistency)
+    User user = User.builder()
+        .id(98L).username("orphanprof").passwordHash("hash")
+        .email("orphanprof@example.com").role(UserRole.PROFESSIONAL).active(true)
+        .build();
+
+    when(userRepository.findById(98L)).thenReturn(Optional.of(user));
+    when(professionalRepository.findByUserId(98L)).thenReturn(Optional.empty());
+
+    // When
+    UserResponse response = userService.getUserById(98L);
+
+    // Then — should return base fields, enrichment fields null, no crash
+    assertEquals("orphanprof", response.getUsername());
+    assertNull(response.getFirstName());
+    assertNull(response.getSpecialty());
   }
 }
