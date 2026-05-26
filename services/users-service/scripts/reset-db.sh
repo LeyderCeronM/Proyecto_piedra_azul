@@ -1,29 +1,25 @@
 #!/usr/bin/env bash
-# Reset the users-service database — truncates all data and resets sequences.
+# Reset the users-service database — deletes all data.
 # Usage: ./scripts/reset-db.sh
 #
-# Requires: psql client with access to the users_db database.
+# Connection: uses PGPASSWORD env var or defaults to 'medical123'.
+# Requires: psql client with access to the users_db database via localhost.
 
 set -euo pipefail
 
 DB_NAME="${DB_NAME:-users_db}"
 DB_USER="${DB_USER:-medical_user}"
+DB_HOST="${DB_HOST:-localhost}"
+export PGPASSWORD="${DB_PASSWORD:-medical123}"
 
 echo "🔄 Resetting database: $DB_NAME"
 echo "⚠️  This will DELETE ALL DATA in the database."
 
-psql -U "$DB_USER" -d "$DB_NAME" <<SQL
--- Disable triggers temporarily
-SET session_replication_role = 'replica';
-
--- Truncate all tables (in dependency order)
-TRUNCATE TABLE professionals RESTART IDENTITY CASCADE;
-TRUNCATE TABLE patients RESTART IDENTITY CASCADE;
-TRUNCATE TABLE users RESTART IDENTITY CASCADE;
-
--- Re-enable triggers
-SET session_replication_role = 'origin';
-
+psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" <<SQL
+-- Delete all rows (respecting FK order)
+DELETE FROM professionals;
+DELETE FROM patients;
+DELETE FROM users;
 SQL
 
-echo "✅ Database reset complete. All tables are empty and sequences reset."
+echo "✅ Database reset complete. All tables are empty."
