@@ -1,0 +1,85 @@
+@startuml SequenceSearchUsers
+' ====================================================================
+' Diagrama de secuencia - Busqueda combinada de usuarios
+' Muestra el flujo de busqueda avanzada con JPA Specification.
+' ====================================================================
+
+skinparam defaultFontName SansSerif
+skinparam sequenceMessageAlign center
+
+actor Client as CLI
+participant "UserController" as CTRL #87CEEB
+participant "UserService" as SVC #90EE90
+participant "IUserRepository" as REPO #F0F8FF
+participant "IPatientRepository" as PAT_REPO #F0F8FF
+participant "IProfessionalRepository" as PROF_REPO #F0F8FF
+database "PostgreSQL" as DB #F5DEB3
+
+== Busqueda por username ==
+
+CLI -> CTRL : GET /api/users/search/username/{username}
+CTRL -> SVC : searchByUsername(username)
+SVC -> REPO : findAllByUsername(username)
+REPO -> DB : SELECT * FROM users WHERE username = ?
+DB --> REPO : ResultSet
+REPO --> SVC : List<User>
+SVC --> CTRL : List<UserResponse>
+CTRL --> CLI : 200 + JSON array
+
+note right
+  Retorna lista vacia si
+  no hay coincidencias.
+end note
+
+== Busqueda por role (con enrichment) ==
+
+CLI -> CTRL : GET /api/users/search/role/{role}
+CTRL -> CTRL : UserRole.valueOf(role)
+note right: Valida el rol, si es invalido retorna 400
+CTRL -> SVC : searchByRole(role)
+SVC -> REPO : findByRole(role)
+REPO -> DB : SELECT * FROM users WHERE role = ?
+note right: Usa el indice idx_users_role_active
+DB --> REPO : ResultSet
+REPO --> SVC : List<User>
+
+alt role == PATIENT
+  SVC -> PAT_REPO : findByUserId(user.id)
+  PAT_REPO --> SVC : Optional<Patient>
+  note right: Enriquece con:\nfirstName, lastName,\ndocumentType, documentNumber,\nbirthDate, phone, address, eps
+else role == PROFESSIONAL
+  SVC -> PROF_REPO : findByUserId(user.id)
+  PROF_REPO --> SVC : Optional<Professional>
+  note right: Enriquece con:\nfirstName, lastName,\nspecialty, licenseNumber, phone
+else ADMIN / SCHEDULER
+  note right: Solo campos base de User
+end
+
+SVC --> CTRL : List<UserResponse>
+CTRL --> CLI : 200 + JSON array
+
+== Busqueda combinada (Specification) ==
+
+CLI -> CTRL : GET /api/users/search/advanced?username=&role=&active=
+CTRL -> CTRL : valida parametros
+CTRL -> SVC : searchAdvanced(username, email, role, active)
+SVC -> SVC : crea Specification<User>
+note right
+  Construye predicados AND
+  solo para parametros no nulos
+  usando JPA Criteria API.
+end note
+SVC -> REPO : findAll(spec)
+REPO -> DB : SELECT * FROM users WHERE (username = ?) AND (role = ?) AND (active = ?)
+DB --> REPO : ResultSet
+REPO --> SVC : List<User>
+SVC --> CTRL : List<UserResponse>
+CTRL --> CLI : 200 + JSON array
+
+note right of SVC
+  Si todos los parametros son
+  null, retorna todos los usuarios
+  (Specification vacia).
+end note
+
+@enduml

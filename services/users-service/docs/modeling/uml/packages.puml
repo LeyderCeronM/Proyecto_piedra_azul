@@ -1,0 +1,36 @@
+@startuml PackagesOverview
+' ====================================================================
+' Diagrama de paquetes del users-service
+' Refleja la estructura de paquetes Java del servicio.
+' ====================================================================
+
+skinparam packageStyle rectangle
+skinparam defaultFontName SansSerif
+
+package "com.medical" as root #F0F0F0 {
+  package "config" as pkg_config
+  package "controller" as pkg_controller
+  package "dto" as pkg_dto
+  package "entities" as pkg_entities
+  package "enums" as pkg_enums
+  package "factory" as pkg_factory
+  package "messenger" as pkg_messenger
+  package "repository" as pkg_repository
+  package "service" as pkg_service
+}
+
+' === LAYER DEPENDENCIES ===
+pkg_controller --> pkg_service : "uses"
+pkg_service --> pkg_factory : "uses"
+pkg_service --> pkg_repository : "uses"
+pkg_service --> pkg_dto : "uses"
+pkg_factory --> pkg_repository : "uses (PatientCreationStrategy)"
+pkg_factory --> pkg_entities : "creates"
+pkg_factory --> pkg_enums : "maps role"
+pkg_repository --> pkg_entities : "persists"
+pkg_messenger --> pkg_repository : "queries"
+pkg_messenger --> pkg_config : "uses RabbitMQ"
+
+note "Estructura de paquetes del users-service\nMicroservicio Spring Boot" as N1
+
+@enduml

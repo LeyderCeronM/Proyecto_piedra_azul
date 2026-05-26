@@ -1,0 +1,81 @@
+@startuml SequenceDeactivateUser
+' ====================================================================
+' Diagrama de secuencia - Desactivacion de Usuario
+' Flujo: HTTP PATCH -> Controller -> Service -> Regla de negocio -> DB
+' Incluye: no desactivar el ultimo ADMIN activo.
+' ====================================================================
+
+actor "Client" as Client
+participant "UserController" as Controller
+participant "UserService" as Service
+participant "IUserRepository" as UserRepo
+database "PostgreSQL" as DB
+
+== HTTP Request ==
+
+Client -> Controller : PATCH /api/users/{id}/deactivate
+activate Controller
+
+Controller -> Service : deactivateUser(id)
+activate Service
+
+== Find User ==
+
+Service -> UserRepo : findById(id)
+activate UserRepo
+UserRepo -> DB : SELECT * FROM users\nWHERE id = ?
+DB --> UserRepo : User
+UserRepo --> Service : user
+deactivate UserRepo
+
+== Business Rules ==
+
+alt Role == ADMIN and active
+  Service -> UserRepo : countByRoleAndActive(ADMIN, true)
+  activate UserRepo
+  UserRepo -> DB : SELECT COUNT(*) FROM users\nWHERE role = 'ADMIN'\nAND active = true
+  DB --> UserRepo : count
+  UserRepo --> Service : activeAdmins
+  deactivate UserRepo
+
+  alt activeAdmins <= 1
+    Service --> Controller : throw IllegalArgumentException\n"It is not possible to deactivate\nthe last administrator"
+    Controller --> Client : 400 BAD REQUEST
+  else activeAdmins > 1
+    Service -> Service : user.setActive(false)
+    Service -> UserRepo : save(user)
+    activate UserRepo
+    UserRepo -> DB : UPDATE users\nSET active = false
+    DB --> UserRepo : updatedUser
+    UserRepo --> Service : done
+    deactivate UserRepo
+    Service --> Controller : void
+    Controller --> Client : 204 NO CONTENT
+  end
+else user already inactive
+  Service --> Controller : throw IllegalArgumentException\n"The user is already inactive"
+  Controller --> Client : 400 BAD REQUEST
+else not ADMIN
+  Service -> Service : user.setActive(false)
+  Service -> UserRepo : save(user)
+  activate UserRepo
+  UserRepo -> DB : UPDATE users\nSET active = false
+  DB --> UserRepo : updatedUser
+  UserRepo --> Service : done
+  deactivate UserRepo
+  Service --> Controller : void
+  Controller --> Client : 204 NO CONTENT
+end
+
+deactivate Service
+deactivate Controller
+
+note left of Client
+  **Regla de Negocio**
+  No se puede desactivar el
+  ultimo administrador activo
+  del sistema para evitar
+  quedar sin acceso administrativo.
+end note
+
+@enduml

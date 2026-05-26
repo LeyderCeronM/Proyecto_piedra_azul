@@ -1,0 +1,37 @@
+@startuml ServiceOperations
+' ====================================================================
+' Diagrama de operaciones - UserService
+' Muestra SOLO metodos (sin relaciones).
+' ====================================================================
+
+skinparam classAttributeIconSize 0
+skinparam defaultFontName SansSerif
+
+class UserService <<service>> #90EE90;line:Black {
+  -userRepository: IUserRepository
+  -patientRepository: IPatientRepository
+  -professionalRepository: IProfessionalRepository
+  -passwordEncoder: PasswordEncoder
+  -creationFactory: UserCreationFactory
+  ..
+  +createUser(CreateUserRequest request): UserResponse
+  +getAllUsers(): List<UserResponse>
+  +getUserById(Long id): UserResponse
+  +updateUser(Long id, UpdateUserRequest request): UserResponse
+  +deactivateUser(Long id): void
+  +validatePatientByDocument(String documentNumber): boolean
+  +getPatientByDocument(String documentNumber): Optional<Patient>
+  ..
+  +searchByUsername(String username): List<UserResponse>
+  +searchByEmail(String email): List<UserResponse>
+  +searchByRole(UserRole role): List<UserResponse>
+  +searchByStatus(Boolean active): List<UserResponse>
+  +searchAdvanced(String username, String email, UserRole role, Boolean active): List<UserResponse>
+  ..
+  -validatePassword(String password): void
+  -mapToResponse(User user): UserResponse
+}
+
+note "Operaciones: Solo se muestran metodos\nRelaciones ver 01-service.puml" as N1
+
+@enduml

@@ -1,0 +1,67 @@
+@startuml MessengerRelations
+' ====================================================================
+' Diagrama de clases - Mensajeria Asincronica
+' Refleja EXACTAMENTE com.medical.messenger.
+' ====================================================================
+
+skinparam classAttributeIconSize 0
+skinparam defaultFontName SansSerif
+
+package "com.medical.messenger" as msgPkg #F0F0F0 {
+
+  class PatientValidationListener <<messenger>> #90EE90;line:Black {
+    {field} -patientRepository: IPatientRepository
+    {field} -rabbitTemplate: RabbitTemplate
+    {method} +handleValidationRequest(PatientValidationRequest): void
+  }
+
+}
+
+package "com.medical.config" as cfgPkg #F0F0F0 {
+
+  class RabbitMQConfig <<configuration>> #F5DEB3;line:Black {
+    {field} +{static} MEDICAL_EXCHANGE: String
+    {field} +{static} PATIENT_VALIDATION_REQUESTS_QUEUE: String
+    {field} +{static} PATIENT_VALIDATION_RESPONSES_QUEUE: String
+    {field} +{static} VALIDATION_REQUEST_ROUTING_KEY: String
+    {field} +{static} VALIDATION_RESPONSE_ROUTING_KEY: String
+    {method} +medicalExchange(): TopicExchange
+    {method} +patientValidationRequestsQueue(): Queue
+    {method} +patientValidationResponsesQueue(): Queue
+    {method} +jsonMessageConverter(): MessageConverter
+    {method} +rabbitTemplate(ConnectionFactory): RabbitTemplate
+  }
+
+}
+
+package "com.medical.repository" as repoPkg #F0F0F0 {
+  interface IPatientRepository <<interface>> #F0F8FF;line:blue
+}
+
+' === DEPENDENCIES ===
+PatientValidationListener "1" --> "1" IPatientRepository : "queries"
+PatientValidationListener "1" --> "1" RabbitTemplate : "publishes"
+
+RabbitMQConfig ..> TopicExchange : "creates"
+RabbitMQConfig ..> Queue : "creates"
+RabbitMQConfig ..> Binding : "creates"
+
+PatientValidationListener ..> PatientValidationRequest : "receives @RabbitListener"
+PatientValidationListener ..> PatientValidationResponse : "publishes"
+
+note bottom of PatientValidationListener
+  **Listener RabbitMQ**
+  Escucha solicitudes de validacion
+  de pacientes desde appointments-service.
+  Responde con los datos del paciente
+  si existe, o error si no.
+end note
+
+note bottom of RabbitMQConfig
+  **Configuracion RabbitMQ**
+  Define exchange topic, colas
+  con TTL de 30s, y bindings
+  para validacion de pacientes.
+end note
+
+@enduml

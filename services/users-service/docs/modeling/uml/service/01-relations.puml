@@ -1,0 +1,71 @@
+@startuml ServiceRelations
+' ====================================================================
+' Diagrama de clases - UserService
+' Refleja EXACTAMENTE com.medical.service.
+' ====================================================================
+
+skinparam classAttributeIconSize 0
+skinparam defaultFontName SansSerif
+
+package "com.medical.service" as servicePkg #F0F0F0 {
+
+  class UserService <<service>> #90EE90;line:Black {
+    {field} -userRepository: IUserRepository
+    {field} -patientRepository: IPatientRepository
+    {field} -professionalRepository: IProfessionalRepository
+    {field} -passwordEncoder: PasswordEncoder
+    {field} -creationFactory: UserCreationFactory
+  }
+
+}
+
+package "com.medical.repository" as repoPkg #F0F0F0 {
+  interface IUserRepository <<interface>> #F0F8FF;line:blue
+  interface IPatientRepository <<interface>> #F0F8FF;line:blue
+  interface IProfessionalRepository <<interface>> #F0F8FF;line:blue
+}
+
+package "com.medical.factory" as factoryPkg #F0F0F0 {
+  class UserCreationFactory <<factory>> #90EE90;line:Black
+}
+
+package "com.medical.dto" as dtoPkg #F0F0F0 {
+  class CreateUserRequest <<dto>> #E0FFFF;line:Black
+  class UpdateUserRequest <<dto>> #E0FFFF;line:Black
+  class UserResponse <<dto>> #E0FFFF;line:Black
+}
+
+package "com.medical.entities" as entityPkg #F0F0F0 {
+  class User <<entity>> #FFFACD;line:Black
+  class Patient <<entity>> #FFFACD;line:Black
+  class Professional <<entity>> #FFFACD;line:Black
+}
+
+' === DEPENDENCIES ===
+UserService "1" --> "1" IUserRepository : "persists users"
+UserService "1" --> "1" IPatientRepository : "persists patients"
+UserService "1" --> "1" IProfessionalRepository : "reads professionals"
+UserService "1" --> "1" UserCreationFactory : "delegates creation"
+UserService "1" --> "1" PasswordEncoder : "encodes passwords"
+
+UserService ..> CreateUserRequest : "receives"
+UserService ..> UpdateUserRequest : "receives"
+UserService ..> UserResponse : "returns"
+
+UserService ..> User : "creates"
+UserService ..> Patient : "creates"
+UserService ..> Professional : "reads"
+
+note bottom of UserService
+  **UserService**
+  Orquesta la creacion, actualizacion,
+  desactivacion y consulta de usuarios.
+  Incluye busqueda por username, email,
+  role, estado, y busqueda combinada
+  via JPA Specifications.
+  Enriquece UserResponse con datos
+  de Patient/Professional segun el rol
+  al mapear la respuesta.
+end note
+
+@enduml

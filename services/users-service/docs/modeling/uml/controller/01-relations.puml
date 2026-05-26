@@ -1,0 +1,43 @@
+@startuml ControllerRelations
+' ====================================================================
+' Diagrama de clases - UserController
+' Refleja EXACTAMENTE com.medical.controller.
+' ====================================================================
+
+skinparam classAttributeIconSize 0
+skinparam defaultFontName SansSerif
+
+package "com.medical.controller" as ctrlPkg #F0F0F0 {
+
+  class UserController <<controller>> #87CEEB;line:Black {
+    {field} -userService: UserService
+  }
+
+}
+
+package "com.medical.service" as svcPkg #F0F0F0 {
+  class UserService <<service>> #90EE90;line:Black
+}
+
+package "com.medical.dto" as dtoPkg #F0F0F0 {
+  class CreateUserRequest <<dto>> #E0FFFF;line:Black
+  class UpdateUserRequest <<dto>> #E0FFFF;line:Black
+  class UserResponse <<dto>> #E0FFFF;line:Black
+}
+
+' === DEPENDENCIES ===
+UserController "1" --> "1" UserService : "delegates"
+
+UserController ..> CreateUserRequest : "receives @RequestBody"
+UserController ..> UpdateUserRequest : "receives @RequestBody"
+UserController ..> UserResponse : "returns @ResponseBody"
+
+note bottom of UserController
+  **Controlador REST**
+  Expone endpoints CRUD + busqueda
+  por username, email, role, status,
+  y busqueda combinada avanzada.
+  Ruta base: /api/users
+end note
+
+@enduml

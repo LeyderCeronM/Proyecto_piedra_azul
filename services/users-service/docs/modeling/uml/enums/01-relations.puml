@@ -1,0 +1,29 @@
+@startuml EnumUserRole
+' ====================================================================
+' Diagrama de clases - Enum UserRole
+' Refleja EXACTAMENTE com.medical.enums.UserRole.
+' ====================================================================
+
+skinparam classAttributeIconSize 0
+skinparam defaultFontName SansSerif
+
+package "com.medical.enums" as enumPkg #F0F0F0 {
+
+  enum UserRole <<enumeration>> #B3D9FF;line:Black {
+    ADMIN
+    SCHEDULER
+    PATIENT
+    PROFESSIONAL
+  }
+
+}
+
+note bottom of UserRole
+  **Roles del sistema**
+  Define los tipos de usuario
+  que puede tener el sistema.
+  Cada rol tiene su propia
+  estrategia de creacion.
+end note
+
+@enduml

@@ -1,0 +1,84 @@
+@startuml RepositoryRelations
+' ====================================================================
+' Diagrama de clases - Repositorios
+' Refleja EXACTAMENTE com.medical.repository.
+' Spring Data JPA repositories.
+' ====================================================================
+
+skinparam classAttributeIconSize 0
+skinparam defaultFontName SansSerif
+
+package "com.medical.repository" as repoPkg #F0F0F0 {
+
+  interface IUserRepository <<interface>> #F0F8FF;line:blue {
+    {method} +findByUsername(String): Optional<User>
+    {method} +findByEmail(String): Optional<User>
+    {method} +findAllByUsername(String): List<User>
+    {method} +findAllByEmail(String): List<User>
+    {method} +findByRole(UserRole): List<User>
+    {method} +findByActive(Boolean): List<User>
+    {method} +existsByUsername(String): boolean
+    {method} +existsByEmail(String): boolean
+    {method} +countByRoleAndActive(UserRole, boolean): long
+  }
+
+  interface IPatientRepository <<interface>> #F0F8FF;line:blue {
+    {method} +findByDocumentNumber(String): Optional<Patient>
+    {method} +findByUserId(Long): Optional<Patient>
+    {method} +existsByDocumentNumber(String): boolean
+  }
+
+  interface IProfessionalRepository <<interface>> #F0F8FF;line:blue {
+    {method} +findByUserId(Long): Optional<Professional>
+  }
+
+}
+
+package "com.medical.entities" as entityPkg #F0F0F0 {
+  class User <<entity>> #FFFACD;line:Black
+  class Patient <<entity>> #FFFACD;line:Black
+  class Professional <<entity>> #FFFACD;line:Black
+}
+
+package "org.springframework.data.jpa.repository" as jpaPkg #F0F0F0 {
+  interface JpaRepository <<interface>> #F0F8FF;line:blue
+  interface JpaSpecificationExecutor <<interface>> #F0F8FF;line:blue
+}
+
+' === INHERITANCE ===
+JpaRepository <|-- IUserRepository : "extends"
+JpaSpecificationExecutor <|-- IUserRepository : "extends"
+JpaRepository <|-- IPatientRepository : "extends"
+JpaRepository <|-- IProfessionalRepository : "extends"
+
+' === USAGE ===
+IUserRepository "1" --> "1" User : "manages"
+IPatientRepository "1" --> "1" Patient : "manages"
+IProfessionalRepository "1" --> "1" Professional : "manages"
+
+note bottom of IUserRepository
+  **Repositorio de Usuarios**
+  Busqueda por username, email,
+  role (indice compuesto role+active),
+  active, y conteo por rol/estado.
+  Soporta busqueda combinada via
+  JpaSpecificationExecutor.
+end note
+
+note bottom of IPatientRepository
+  **Repositorio de Pacientes**
+  Busqueda por numero de
+  documento para validacion
+  asincronica (RabbitMQ) y
+  por userId para enriquecer
+  UserResponse.
+end note
+
+note bottom of IProfessionalRepository
+  **Repositorio de Profesionales**
+  Busqueda por userId para
+  enriquecer UserResponse
+  con datos del profesional.
+end note
+
+@enduml
