@@ -3,7 +3,7 @@
 **Version:** 1.0.0  
 **Project:** Piedrazul Medical Services Network  
 **Authors:** Henry Fernando Mulato Llanten [henrymulato@unicauca.edu.co](mailto:henrymulato@unicauca.edu.co)  
-**Stack:** Java 21, Spring Boot 3.2.5, PostgreSQL, Maven
+**Stack:** Java 21, Spring Boot 3.5.14, PostgreSQL, Maven
 
 ---
 
@@ -65,7 +65,7 @@ Cada estrategia valida los campos específicos de su rol. Las estrategias `Patie
 | Componente | Versión |
 |------------|---------|
 | Java | 21 |
-| Spring Boot | 3.2.5 |
+| Spring Boot | 3.5.14 |
 | Spring Data JPA | — |
 | Spring Security | — |
 | Spring AMQP (RabbitMQ) | — |

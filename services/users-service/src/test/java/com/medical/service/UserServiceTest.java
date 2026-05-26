@@ -15,10 +15,12 @@ import com.medical.repository.IPatientRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
@@ -706,7 +708,7 @@ class UserServiceTest {
         .id(1L).username("jdoe").passwordHash("hash")
         .email("jdoe@example.com").role(UserRole.PATIENT).active(true)
         .build();
-    when(userRepository.findAll(any(org.springframework.data.jpa.domain.Specification.class)))
+    when(userRepository.findAll(ArgumentMatchers.<Specification<User>>any()))
         .thenReturn(List.of(user));
 
     // When
@@ -715,7 +717,7 @@ class UserServiceTest {
     // Then
     assertEquals(1, result.size());
     assertEquals("jdoe", result.get(0).getUsername());
-    verify(userRepository).findAll(any(org.springframework.data.jpa.domain.Specification.class));
+    verify(userRepository).findAll(ArgumentMatchers.<Specification<User>>any());
   }
 
   @Test
@@ -725,7 +727,7 @@ class UserServiceTest {
         .id(1L).username("user1").passwordHash("hash")
         .email("user1@example.com").role(UserRole.ADMIN).active(true)
         .build();
-    when(userRepository.findAll(any(org.springframework.data.jpa.domain.Specification.class)))
+    when(userRepository.findAll(ArgumentMatchers.<Specification<User>>any()))
         .thenReturn(List.of(user));
 
     // When
@@ -733,13 +735,13 @@ class UserServiceTest {
 
     // Then
     assertEquals(1, result.size());
-    verify(userRepository).findAll(any(org.springframework.data.jpa.domain.Specification.class));
+    verify(userRepository).findAll(ArgumentMatchers.<Specification<User>>any());
   }
 
   @Test
   void shouldReturnEmptyList_whenAdvancedSearchNoMatches() {
     // Given
-    when(userRepository.findAll(any(org.springframework.data.jpa.domain.Specification.class)))
+    when(userRepository.findAll(ArgumentMatchers.<Specification<User>>any()))
         .thenReturn(List.of());
 
     // When
@@ -747,7 +749,7 @@ class UserServiceTest {
 
     // Then
     assertTrue(result.isEmpty());
-    verify(userRepository).findAll(any(org.springframework.data.jpa.domain.Specification.class));
+    verify(userRepository).findAll(ArgumentMatchers.<Specification<User>>any());
   }
 
   // ──────────────────────────────────────────────

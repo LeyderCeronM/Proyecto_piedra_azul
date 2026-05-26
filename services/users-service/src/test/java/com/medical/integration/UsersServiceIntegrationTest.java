@@ -58,8 +58,10 @@ class UsersServiceIntegrationTest {
     return Long.parseLong(body.substring(idStart, idEnd).trim());
   }
 
-  /** Shortcut: create a user with minimal fields. Uses SCHEDULER to avoid
-   *  PATIENT validation and last-admin protection. */
+  /**
+   * Shortcut: create a user with minimal fields. Uses SCHEDULER to avoid
+   * PATIENT validation and last-admin protection.
+   */
   private Long createUser(String label) {
     CreateUserRequest req = CreateUserRequest.builder()
         .username(label + "." + suffix)
@@ -163,7 +165,7 @@ class UsersServiceIntegrationTest {
 
   @Test
   void shouldRejectUpdateWithDuplicateUsername() {
-    Long userAId = createUser("dupa");
+    createUser("dupa");
     Long userBId = createUser("dupb");
 
     // Try to update user B with user A's username
@@ -245,7 +247,7 @@ class UsersServiceIntegrationTest {
 
   @Test
   void shouldSearchByUsername() {
-    Long userId = createUser("srch");
+    createUser("srch");
 
     ResponseEntity<String> response = restTemplate.getForEntity(
         url("/api/users/search/username/srch." + suffix), String.class);
@@ -265,7 +267,7 @@ class UsersServiceIntegrationTest {
 
   @Test
   void shouldSearchByEmail() {
-    Long userId = createUser("srchemail");
+    createUser("srchemail");
 
     ResponseEntity<String> response = restTemplate.getForEntity(
         url("/api/users/search/email/srchemail." + suffix + "@test.com"), String.class);

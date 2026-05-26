@@ -5,14 +5,16 @@ import com.medical.dto.UpdateUserRequest;
 import com.medical.dto.UserResponse;
 import com.medical.entities.User;
 import com.medical.entities.Patient;
-import com.medical.entities.Professional;
 import com.medical.enums.UserRole;
 import com.medical.factory.UserCreationFactory;
 import com.medical.factory.IUserCreationStrategy;
 import com.medical.repository.IUserRepository;
 import com.medical.repository.IPatientRepository;
 import com.medical.repository.IProfessionalRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -299,7 +301,7 @@ public class UserService {
    */
   @Transactional(readOnly = true)
   public List<UserResponse> searchAdvanced(String username, String email, UserRole role, Boolean active) {
-    Specification<User> spec = (root, query, cb) -> {
+    Specification<User> spec = (Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) -> {
       List<Predicate> predicates = new ArrayList<>();
       if (username != null) {
         predicates.add(cb.equal(root.get("username"), username));
