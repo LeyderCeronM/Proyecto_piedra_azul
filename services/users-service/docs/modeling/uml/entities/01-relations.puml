@@ -1,0 +1,88 @@
+@startuml EntitiesRelations
+' ====================================================================
+' Diagrama de clases - Entidades JPA
+' Refleja EXACTAMENTE com.medical.entities.
+' ====================================================================
+
+skinparam classAttributeIconSize 0
+skinparam defaultFontName SansSerif
+
+' === ENTITIES ===
+package "com.medical.entities" as entityPkg #F0F0F0 {
+
+  class User <<entity>> #FFFACD;line:Black {
+    {field} -id: Long
+    {field} -username: String
+    {field} -passwordHash: String
+    {field} -email: String
+    {field} -role: UserRole
+    {field} -active: Boolean = true
+    {field} -createdAt: LocalDateTime
+    {field} -updatedAt: LocalDateTime
+    ..
+    {method} #onCreate(): void
+    {method} #onUpdate(): void
+  }
+
+  class Patient <<entity>> #FFFACD;line:Black {
+    {field} -id: Long
+    {field} -firstName: String
+    {field} -lastName: String
+    {field} -documentType: String
+    {field} -documentNumber: String
+    {field} -birthDate: LocalDate
+    {field} -phone: String
+    {field} -address: String
+    {field} -eps: String
+  }
+
+  class Professional <<entity>> #FFFACD;line:Black {
+    {field} -id: Long
+    {field} -firstName: String
+    {field} -lastName: String
+    {field} -specialty: String
+    {field} -licenseNumber: String
+    {field} -phone: String
+  }
+
+}
+
+' === EXTERNAL DEPENDENCIES ===
+package "com.medical.enums" as enumPkg #F0F0F0 {
+  enum UserRole #B3D9FF;line:Black
+}
+
+' === RELATIONSHIPS ===
+User "1" --> "1" UserRole : "has"
+
+User "1" --> "0..1" Patient : "has (OneToOne)"
+Patient "0..1" --> "1" User : "belongs to"
+
+User "1" --> "0..1" Professional : "has (OneToOne)"
+Professional "0..1" --> "1" User : "belongs to"
+
+note bottom of User
+  **Entidad base**
+  Timestamps manejados con
+  @PrePersist / @PreUpdate.
+  Indices: active y compuesto
+  (role, active). El compuesto
+  cubre busquedas solo por role
+  via leftmost prefix.
+end note
+
+note right of Patient
+  **Paciente**
+  Datos específicos del paciente
+  vinculado 1:1 con User.
+  EPS, tipo/numero de documento.
+end note
+
+note right of Professional
+  **Profesional**
+  Datos específicos del profesional
+  vinculado 1:1 con User.
+  Specialty: Neuralterapia, Quiropraxia...
+end note
+
+@enduml

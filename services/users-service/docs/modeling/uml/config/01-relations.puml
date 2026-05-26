@@ -1,0 +1,30 @@
+@startuml ConfigSecurity
+' ====================================================================
+' Diagrama de clases - SecurityConfig
+' Refleja EXACTAMENTE com.medical.config.
+' ====================================================================
+
+skinparam classAttributeIconSize 0
+skinparam defaultFontName SansSerif
+
+package "com.medical.config" as cfgPkg #F0F0F0 {
+
+  class SecurityConfig <<configuration>> #F5DEB3;line:Black {
+    {method} +passwordEncoder(): PasswordEncoder
+    {method} +securityFilterChain(HttpSecurity): SecurityFilterChain
+  }
+
+}
+
+SecurityConfig ..> PasswordEncoder : "provides (BCrypt)"
+SecurityConfig ..> SecurityFilterChain : "configures"
+
+note bottom of SecurityConfig
+  **Seguridad (Desarrollo)**
+  Por ahora permite todo /api/**
+  y /actuator/**.
+  PasswordEncoder con BCrypt
+  para hashing de contrasenas.
+end note
+
+@enduml

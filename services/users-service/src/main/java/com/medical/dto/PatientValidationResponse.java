@@ -10,6 +10,7 @@ import java.io.Serializable;
 /**
  * Response message for patient validation via RabbitMQ.
  * Sent from users-service to appointments-service.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Data
 @Builder
@@ -17,35 +18,35 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class PatientValidationResponse implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * Correlation ID to match with request.
-     */
-    private String correlationId;
+  /**
+   * Correlation ID to match with request.
+   */
+  private String correlationId;
 
-    /**
-     * Whether patient exists and is valid.
-     */
-    private boolean valid;
+  /**
+   * Whether patient exists and is valid.
+   */
+  private boolean valid;
 
-    /**
-     * Patient name if found (for display in appointment).
-     */
-    private String patientName;
+  /**
+   * Patient name if found (for display in appointment).
+   */
+  private String patientName;
 
-    /**
-     * Patient document number.
-     */
-    private String patientDocument;
+  /**
+   * Patient document number.
+   */
+  private String patientDocument;
 
-    /**
-     * Error message if validation failed.
-     */
-    private String error;
+  /**
+   * Error message if validation failed.
+   */
+  private String error;
 
-    /**
-     * Timestamp when response was created.
-     */
-    private String timestamp;
+  /**
+   * Timestamp when response was created.
+   */
+  private String timestamp;
 }

@@ -1,12 +1,14 @@
 package com.medical.dto;
 
-import com.medical.entities.UserRole;
+import com.medical.enums.UserRole;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
 /**
  * Request DTO for updating a user.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Data
 @NoArgsConstructor
@@ -14,24 +16,24 @@ import lombok.*;
 @Builder
 public class UpdateUserRequest {
 
-    @Size(min = 4, max = 50, message = "Username must be between 4 and 50 characters")
-    private String username;
+  @Size(min = 4, max = 50, message = "Username must be between 4 and 50 characters")
+  private String username;
 
-    private String password;
+  private String password;
 
-    @Email(message = "Invalid email format")
-    private String email;
+  @Email(message = "Invalid email format")
+  private String email;
 
-    private UserRole role;
+  private UserRole role;
 
-    // Extended fields
-    private String firstName;
-    private String lastName;
-    private String documentType;
-    private String documentNumber;
-    private String phone;
-    private String address;
-    private String eps;
-    private String specialty;
-    private String licenseNumber;
+  // Extended fields
+  private String firstName;
+  private String lastName;
+  private String documentType;
+  private String documentNumber;
+  private String phone;
+  private String address;
+  private String eps;
+  private String specialty;
+  private String licenseNumber;
 }

@@ -1,0 +1,51 @@
+@startuml FactoryOperations
+' ====================================================================
+' Diagrama de operaciones - Factory + Strategy Pattern
+' Muestra SOLO metodos y atributos (sin relaciones).
+' ====================================================================
+
+skinparam classAttributeIconSize 0
+skinparam defaultFontName SansSerif
+
+interface IUserCreationStrategy <<interface>> #F0F8FF;line:blue {
+  +getSupportedRole(): UserRole
+  +createUser(CreateUserRequest request, String encodedPassword): User
+  +{abstract} createAssociatedEntities(User savedUser, CreateUserRequest request): void
+}
+
+class UserCreationFactory <<factory>> #90EE90;line:Black {
+  -strategies: Map<UserRole, IUserCreationStrategy>
+  ..
+  +{constructor} UserCreationFactory(List<IUserCreationStrategy> strategyList)
+  +getStrategy(UserRole role): IUserCreationStrategy
+}
+
+class PatientCreationStrategy <<strategy>> #90EE90;line:Black {
+  -patientRepository: IPatientRepository
+  ..
+  +getSupportedRole(): UserRole
+  +createUser(CreateUserRequest request, String encodedPassword): User
+  +createAssociatedEntities(User savedUser, CreateUserRequest request): void
+}
+
+class ProfessionalCreationStrategy <<strategy>> #90EE90;line:Black {
+  -professionalRepository: IProfessionalRepository
+  ..
+  +getSupportedRole(): UserRole
+  +createUser(CreateUserRequest request, String encodedPassword): User
+  +createAssociatedEntities(User savedUser, CreateUserRequest request): void
+}
+
+class AdminCreationStrategy <<strategy>> #90EE90;line:Black {
+  +getSupportedRole(): UserRole
+  +createUser(CreateUserRequest request, String encodedPassword): User
+}
+
+class SchedulerCreationStrategy <<strategy>> #90EE90;line:Black {
+  +getSupportedRole(): UserRole
+  +createUser(CreateUserRequest request, String encodedPassword): User
+}
+
+note "Operaciones: Solo se muestran metodos y atributos\nRelaciones ver 03-factory.puml" as N1
+
+@enduml

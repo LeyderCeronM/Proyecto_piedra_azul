@@ -1,0 +1,105 @@
+@startuml DtoRelations
+' ====================================================================
+' Diagrama de clases - DTOs
+' Refleja EXACTAMENTE com.medical.dto.
+' ====================================================================
+
+skinparam classAttributeIconSize 0
+skinparam defaultFontName SansSerif
+
+package "com.medical.dto" as dtoPkg #F0F0F0 {
+
+  class UserResponse <<dto>> #E0FFFF;line:Black {
+    {field} -id: Long
+    {field} -username: String
+    {field} -email: String
+    {field} -role: UserRole
+    {field} -active: Boolean
+    {field} -createdAt: LocalDateTime
+    {field} -updatedAt: LocalDateTime
+    {field} -firstName: String
+    {field} -lastName: String
+    {field} -specialty: String
+    {field} -licenseNumber: String
+    {field} -documentType: String
+    {field} -documentNumber: String
+    {field} -birthDate: LocalDate
+    {field} -phone: String
+    {field} -address: String
+    {field} -eps: String
+  }
+
+  class CreateUserRequest <<dto>> #E0FFFF;line:Black {
+    {field} -username: String
+    {field} -password: String
+    {field} -email: String
+    {field} -role: UserRole
+    {field} -firstName: String
+    {field} -lastName: String
+    {field} -documentType: String
+    {field} -documentNumber: String
+    {field} -phone: String
+    {field} -address: String
+    {field} -eps: String
+    {field} -specialty: String
+    {field} -licenseNumber: String
+  }
+
+  class UpdateUserRequest <<dto>> #E0FFFF;line:Black {
+    {field} -username: String
+    {field} -password: String
+    {field} -email: String
+    {field} -role: UserRole
+    {field} -firstName: String
+    {field} -lastName: String
+    {field} -documentType: String
+    {field} -documentNumber: String
+    {field} -phone: String
+    {field} -address: String
+    {field} -eps: String
+    {field} -specialty: String
+    {field} -licenseNumber: String
+  }
+
+  class PatientValidationRequest <<dto>> #E0FFFF;line:Black {
+    {field} -correlationId: String
+    {field} -documentNumber: String
+    {field} -timestamp: LocalDateTime
+  }
+
+  class PatientValidationResponse <<dto>> #E0FFFF;line:Black {
+    {field} -correlationId: String
+    {field} -valid: boolean
+    {field} -patientName: String
+    {field} -patientDocument: String
+    {field} -error: String
+    {field} -timestamp: String
+  }
+
+}
+
+package "com.medical.enums" as enumPkg #F0F0F0 {
+  enum UserRole #LightBlue;line:Black
+}
+
+' === RELATIONSHIPS ===
+CreateUserRequest "1" --> "1" UserRole : "has"
+UpdateUserRequest "1" --> "1" UserRole : "has"
+UserResponse "1" --> "1" UserRole : "has"
+
+note bottom of CreateUserRequest
+  **Solicitud de creación**
+  Contiene campos para todos
+  los roles. La validación
+  específica la hace cada
+  IUserCreationStrategy.
+end note
+
+note bottom of PatientValidationRequest
+  **Validación asincrónica**
+  Enviado por appointments-service
+  vía RabbitMQ para validar
+  existencia de paciente.
+end note
+
+@enduml

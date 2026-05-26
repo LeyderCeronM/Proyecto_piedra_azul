@@ -1,0 +1,94 @@
+@startuml FactoryRelations
+' ====================================================================
+' Diagrama de clases - Factory + Strategy Pattern
+' Refleja EXACTAMENTE com.medical.factory.
+' Implements the Strategy pattern for role-based user creation.
+' ====================================================================
+
+skinparam classAttributeIconSize 0
+skinparam defaultFontName SansSerif
+
+package "com.medical.factory" as factoryPkg #F0F0F0 {
+
+  interface IUserCreationStrategy <<interface>> #F0F8FF;line:blue {
+    {method} +getSupportedRole(): UserRole
+    {method} +createUser(CreateUserRequest, String): User
+    {method} +createAssociatedEntities(User, CreateUserRequest): void
+  }
+
+  class PatientCreationStrategy <<strategy>> #90EE90;line:Black {
+    {field} -patientRepository: IPatientRepository
+    {method} +getSupportedRole(): UserRole
+    {method} +createUser(CreateUserRequest, String): User
+    {method} +createAssociatedEntities(User, CreateUserRequest): void
+  }
+
+  class ProfessionalCreationStrategy <<strategy>> #90EE90;line:Black {
+    {field} -professionalRepository: IProfessionalRepository
+    {method} +getSupportedRole(): UserRole
+    {method} +createUser(CreateUserRequest, String): User
+    {method} +createAssociatedEntities(User, CreateUserRequest): void
+  }
+
+  class AdminCreationStrategy <<strategy>> #90EE90;line:Black {
+    {method} +getSupportedRole(): UserRole
+    {method} +createUser(CreateUserRequest, String): User
+  }
+
+  class SchedulerCreationStrategy <<strategy>> #90EE90;line:Black {
+    {method} +getSupportedRole(): UserRole
+    {method} +createUser(CreateUserRequest, String): User
+  }
+
+  class UserCreationFactory <<factory>> #90EE90;line:Black {
+    {field} -strategies: Map<UserRole, IUserCreationStrategy>
+    {method} +getStrategy(UserRole): IUserCreationStrategy
+  }
+
+}
+
+package "com.medical.repository" as repoPkg #F0F0F0 {
+  interface IPatientRepository #F0F8FF;line:blue
+  interface IProfessionalRepository #F0F8FF;line:blue
+}
+
+' === STRATEGY RELATIONSHIPS ===
+IUserCreationStrategy <|.. PatientCreationStrategy : "implements"
+IUserCreationStrategy <|.. ProfessionalCreationStrategy : "implements"
+IUserCreationStrategy <|.. AdminCreationStrategy : "implements"
+IUserCreationStrategy <|.. SchedulerCreationStrategy : "implements"
+
+UserCreationFactory "1" --> "1..*" IUserCreationStrategy : "registers & resolves"
+
+PatientCreationStrategy "1" --> "1" IPatientRepository : "uses (post-save)"
+ProfessionalCreationStrategy "1" --> "1" IProfessionalRepository : "uses (post-save)"
+
+note right of IUserCreationStrategy
+  **Interfaz Strategy**
+  Define el contrato que cada
+  estrategia de creacion debe
+  implementar segun el rol.
+end note
+
+note bottom of PatientCreationStrategy
+  **Estrategia Paciente**
+  Valida firstName, lastName,
+  documentType, documentNumber.
+  Crea la entidad Patient post-save.
+end note
+
+note bottom of ProfessionalCreationStrategy
+  **Estrategia Profesional**
+  Valida specialty y licenseNumber.
+  Crea la entidad Professional post-save
+  via IProfessionalRepository.
+end note
+
+note bottom of UserCreationFactory
+  **Factoría**
+  Recibe todas las strategies via
+  constructor injection (Spring).
+  Resuelve la strategy por UserRole.
+end note
+
+@enduml

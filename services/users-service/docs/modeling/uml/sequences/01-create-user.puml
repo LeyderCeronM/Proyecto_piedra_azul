@@ -1,43 +1,107 @@
 @startuml SequenceCreateUser
+' ====================================================================
+' Diagrama de secuencia - Creacion de Usuario con Strategy Pattern
+' Flujo completo: HTTP POST -> Controller -> Service -> Factory -> DB
+' ====================================================================
 
-actor "User" as User
-participant "UserManagementPanel" as Panel
-participant "UserFormDialog" as Dialog
+actor "Client" as Client
+participant "UserController" as Controller
 participant "UserService" as Service
-participant "UserFactory" as Factory
-participant "UserRepository" as Repo
-database "SQLite" as DB
+participant "UserCreationFactory" as Factory
+participant "IUserCreationStrategy" as Strategy
+participant "IUserRepository" as UserRepo
+participant "IPatientRepository" as PatientRepo
+database "PostgreSQL" as DB
 
-== Create User (UI) ==
+== HTTP Request ==
 
-User -> Panel : click "Create"
-Panel -> Dialog : new UserFormDialog(parent, null)
-Dialog --> Panel : dialog.setVisible(true)
+Client -> Controller : POST /api/users\n(CreateUserRequest JSON)
+activate Controller
 
-User -> Dialog : fill form
-Dialog -> Dialog : validate fields
-Dialog --> User : show errors if any
+Controller -> Service : createUser(request)
+activate Service
 
-User -> Dialog : click "Save"
-Dialog -> Dialog : final validation
-Dialog --> Panel : dialog.isConfirmed() = true\ndialog.getUser()
+== Cross-cutting Validations ==
 
-== Service (Application) ==
+Service -> UserRepo : existsByUsername(username)
+activate UserRepo
+UserRepo --> Service : false
+deactivate UserRepo
 
-Panel -> Service : create(UserDTO)
-Service -> Factory : create(UserDTO)
-Factory --> Service : User entity (validated)
+Service -> UserRepo : existsByEmail(email)
+activate UserRepo
+UserRepo --> Service : false
+deactivate UserRepo
 
-Service -> Repo : save(User)
-Repo -> DB : INSERT INTO users
-DB --> Repo : OK / error
-Repo --> Service : User (with generated ID)
+Service -> Service : validatePassword(password)
+note right: 8+ caracteres, mayuscula,\nnumero, caracter especial
 
-Service --> Panel : UserDTO (created)
+Service -> Service : passwordEncoder.encode(password)
+note right: Hash BCrypt
 
-== Update UI ==
+== Strategy Resolution ==
 
-Panel -> Panel : tableModel.addUser(UserDTO)
-Panel --> User : show success message
+Service -> Factory : getStrategy(role)
+activate Factory
+Factory --> Service : PatientCreationStrategy
+deactivate Factory
+note right: La Factory mapea UserRole\na la strategy correspondiente
+
+== Role-specific Creation ==
+
+Service -> Strategy : createUser(request, encodedPassword)
+activate Strategy
+
+alt Role == PATIENT
+  Strategy -> Strategy : validate firstName,\nlastName, documentType,\ndocumentNumber
+end
+
+Strategy --> Service : User entity (unsaved)
+deactivate Strategy
+
+== Persistence ==
+
+Service -> UserRepo : save(user)
+activate UserRepo
+UserRepo -> DB : INSERT INTO users
+DB --> UserRepo : user with generated ID
+UserRepo --> Service : savedUser
+deactivate UserRepo
+
+== Post-save Actions (Strategy) ==
+
+alt Role == PATIENT
+  Service -> Strategy : createAssociatedEntities(savedUser, request)
+  activate Strategy
+
+  Strategy -> PatientRepo : save(patient)
+  activate PatientRepo
+  PatientRepo -> DB : INSERT INTO patients
+  DB --> PatientRepo : patient with generated ID
+  PatientRepo --> Strategy : savedPatient
+  deactivate PatientRepo
+
+  Strategy --> Service : done
+  deactivate Strategy
+end
+
+== Response ==
+
+Service -> Service : mapToResponse(savedUser)
+
+Service --> Controller : UserResponse
+deactivate Service
+
+Controller --> Client : 201 CREATED\n(UserResponse JSON)
+deactivate Controller
+
+note left of Client
+  **Patron Strategy**
+  El Service delega la creacion
+  especifica por rol a la Strategy.
+  Si se agrega un nuevo rol,
+  solo se crea una nueva Strategy,
+  el Service no se modifica (OCP).
+end note
 
 @enduml

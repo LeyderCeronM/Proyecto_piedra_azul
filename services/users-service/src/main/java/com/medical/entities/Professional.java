@@ -6,6 +6,7 @@ import lombok.*;
 /**
  * Professional (medical staff) specific data.
  * Schedule management is handled by professionals-service.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Entity
 @Table(name = "professionals")

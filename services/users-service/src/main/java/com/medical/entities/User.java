@@ -4,11 +4,17 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
+import com.medical.enums.UserRole;
+
 /**
  * Base user entity for authentication and basic information.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Entity
-@Table(name = "users")
+@Table(name = "users", indexes = {
+    @Index(name = "idx_users_active", columnList = "active"),
+    @Index(name = "idx_users_role_active", columnList = "role, active")
+})
 @Getter
 @Setter
 @NoArgsConstructor

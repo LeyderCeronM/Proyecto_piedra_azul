@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 /**
  * Request message for patient validation via RabbitMQ.
  * Sent from appointments-service to users-service.
+ * @author Henry Fernando Mulato Llanten <henrymulato@unicauca.edu.co>
  */
 @Data
 @Builder
@@ -18,20 +19,20 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class PatientValidationRequest implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * Unique correlation ID to match request with response.
-     */
-    private String correlationId;
+  /**
+   * Unique correlation ID to match request with response.
+   */
+  private String correlationId;
 
-    /**
-     * Document number to validate.
-     */
-    private String documentNumber;
+  /**
+   * Document number to validate.
+   */
+  private String documentNumber;
 
-    /**
-     * Timestamp when request was created.
-     */
-    private LocalDateTime timestamp;
+  /**
+   * Timestamp when request was created.
+   */
+  private LocalDateTime timestamp;
 }

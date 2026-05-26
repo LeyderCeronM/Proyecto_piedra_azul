@@ -1,0 +1,57 @@
+@startuml SequencePatientValidation
+' ====================================================================
+' Diagrama de secuencia - Validacion Asincronica de Paciente
+' Flujo: appointments-service -> RabbitMQ -> users-service -> respuesta
+' ====================================================================
+
+participant "AppointmentsService" as ApptService
+participant "RabbitMQ\nmedical.exchange" as RabbitMQ
+participant "PatientValidationListener" as Listener
+participant "IPatientRepository" as PatientRepo
+database "PostgreSQL" as DB
+
+== Validation Request ==
+
+ApptService -> RabbitMQ : publish(\n  routingKey: "validation.request"\n  PatientValidationRequest\n)
+note right: Incluye documentNumber\ny correlationId
+
+RabbitMQ -> Listener : @RabbitListener\npatient.validation.requests
+activate Listener
+
+Listener -> Listener : log.info("Received request\nfor document: {doc}")
+
+Listener -> PatientRepo : findByDocumentNumber(documentNumber)
+activate PatientRepo
+PatientRepo -> DB : SELECT * FROM patients\nWHERE document_number = ?
+DB --> PatientRepo : Optional<Patient>
+PatientRepo --> Listener : patientOpt
+deactivate PatientRepo
+
+== Decision ==
+
+alt Patient found
+  Listener -> Listener : build PatientValidationResponse\nvalid=true, patientName, patientDocument
+  note right: Extrae firstName + lastName\ndel paciente encontrado
+else Patient not found
+  Listener -> Listener : build PatientValidationResponse\nvalid=false, error="Patient not found"
+end
+
+== Response ==
+
+Listener -> RabbitMQ : publish(\n  routingKey: "validation.response"\n  PatientValidationResponse\n)
+
+RabbitMQ --> ApptService : receives response
+note right: AppointmentsService\nempareja por correlationId
+
+Listener --> Listener : log.info("Response published")
+deactivate Listener
+
+note left of Listener
+  **Mensajeria Asincronica**
+  La validacion por RabbitMQ
+  permite que appointments-service
+  no bloquee su flujo principal.
+  Timeout: 30s TTL en las colas.
+end note
+
+@enduml
