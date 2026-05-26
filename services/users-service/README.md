@@ -53,10 +53,10 @@ UserCreationFactory
 ├── AdminCreationStrategy       → Crea usuarios ADMIN
 ├── SchedulerCreationStrategy   → Crea usuarios SCHEDULER
 ├── PatientCreationStrategy     → Crea pacientes (con entidad Patient asociada)
-└── ProfessionalCreationStrategy → Crea profesionales médicos
+└── ProfessionalCreationStrategy → Crea profesionales médicos (con entidad Professional asociada)
 ```
 
-Cada estrategia valida los campos específicos de su rol y, en el caso de PATIENT, crea la entidad asociada (`Patient`) vía `createAssociatedEntities()`.
+Cada estrategia valida los campos específicos de su rol. Las estrategias `PatientCreationStrategy` y `ProfessionalCreationStrategy` además crean las entidades asociadas (`Patient` o `Professional`) vía `createAssociatedEntities()`.
 
 ---
 
@@ -217,6 +217,7 @@ Puerto por defecto: **8081**.
 | Registro exitoso con datos válidos | ✅ Cubierto |
 | Rechazo por campos obligatorios faltantes | ✅ Cubierto |
 | Rechazo por login duplicado | ✅ Cubierto |
+| Rol médico con datos profesionales (specialty, licenseNumber) | ✅ Cubierto |
 | Rol médico sin asociación profesional | ⏳ Pendiente (integración con professionals-service) |
 | Rechazo por contraseña inválida | ✅ Cubierto |
 
@@ -284,11 +285,13 @@ mvn test -Dtest="com.medical.integration.UsersServiceIntegrationTest"
 | Tipo | Tests | Pasan | Saltados |
 |------|:-----:|:-----:|:--------:|
 | Unit (service) | 36 | 36 | 2 |
-| Unit (factory) | 16 | 16 | 0 |
+| Unit (factory) | 17 | 17 | 0 |
 | Integration | 19 | 19 | 0 |
-| **Total** | **71** | **71** | **2** |
+| **Total** | **72** | **72** | **2** |
 
 > Los 2 tests saltados corresponden a escenarios pendientes de integración con `professionals-service`.
+> 
+> ✅ Fix aplicado: `ProfessionalCreationStrategy` ahora crea la entidad `Professional` asociada al registrar un usuario PROFESSIONAL, resolviendo el gap productivo donde el profesional se creaba sin sus datos específicos (specialty, licenseNumber).
 
 ### Convenciones de Tests
 

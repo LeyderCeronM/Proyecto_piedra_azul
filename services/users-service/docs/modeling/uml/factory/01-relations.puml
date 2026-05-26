@@ -24,8 +24,10 @@ package "com.medical.factory" as factoryPkg #F0F0F0 {
   }
 
   class ProfessionalCreationStrategy <<strategy>> #90EE90;line:Black {
+    {field} -professionalRepository: IProfessionalRepository
     {method} +getSupportedRole(): UserRole
     {method} +createUser(CreateUserRequest, String): User
+    {method} +createAssociatedEntities(User, CreateUserRequest): void
   }
 
   class AdminCreationStrategy <<strategy>> #90EE90;line:Black {
@@ -47,6 +49,7 @@ package "com.medical.factory" as factoryPkg #F0F0F0 {
 
 package "com.medical.repository" as repoPkg #F0F0F0 {
   interface IPatientRepository #F0F8FF;line:blue
+  interface IProfessionalRepository #F0F8FF;line:blue
 }
 
 ' === STRATEGY RELATIONSHIPS ===
@@ -58,6 +61,7 @@ IUserCreationStrategy <|.. SchedulerCreationStrategy : "implements"
 UserCreationFactory "1" --> "1..*" IUserCreationStrategy : "registers & resolves"
 
 PatientCreationStrategy "1" --> "1" IPatientRepository : "uses (post-save)"
+ProfessionalCreationStrategy "1" --> "1" IProfessionalRepository : "uses (post-save)"
 
 note right of IUserCreationStrategy
   **Interfaz Strategy**
@@ -76,6 +80,8 @@ end note
 note bottom of ProfessionalCreationStrategy
   **Estrategia Profesional**
   Valida specialty y licenseNumber.
+  Crea la entidad Professional post-save
+  via IProfessionalRepository.
 end note
 
 note bottom of UserCreationFactory

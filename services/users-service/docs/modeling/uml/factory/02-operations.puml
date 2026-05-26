@@ -29,8 +29,11 @@ class PatientCreationStrategy <<strategy>> #90EE90;line:Black {
 }
 
 class ProfessionalCreationStrategy <<strategy>> #90EE90;line:Black {
+  -professionalRepository: IProfessionalRepository
+  ..
   +getSupportedRole(): UserRole
   +createUser(CreateUserRequest request, String encodedPassword): User
+  +createAssociatedEntities(User savedUser, CreateUserRequest request): void
 }
 
 class AdminCreationStrategy <<strategy>> #90EE90;line:Black {
