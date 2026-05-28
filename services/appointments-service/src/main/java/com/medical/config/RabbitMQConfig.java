@@ -89,9 +89,9 @@ public class RabbitMQConfig {
      * RabbitTemplate for publishing messages.
      */
     @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
         RabbitTemplate template = new RabbitTemplate(connectionFactory);
-        template.setMessageConverter(jsonMessageConverter());
+        template.setMessageConverter(messageConverter);
         template.setExchange(MEDICAL_EXCHANGE);
         return template;
     }
