@@ -1,0 +1,554 @@
+<html><head><meta charset="utf-8"></head><body><table border="1">
+<tr><th>ID</th><th>Épica</th><th>Rol</th><th>Funcionalidad</th><th>Razón</th>
+<th>Escenario ID</th><th>Título Escenario</th><th>Dado que (Given)</th><th>Cuando (When)</th><th>Entonces (Then)</th></tr>
+<tr>
+<td>E1-US1</td>
+<td>E1 — Administrar usuarios</td>
+<td>Como administrador</td>
+<td>Quiero crear un usuario en el sistema</td>
+<td>Para que puedan acceder al sistema según su rol asignado</td>
+<td>1</td>
+<td>El administrador está autenticado y completa correctamente todos los campos obligatorios</td>
+<td>Se registra un nuevo usuario</td>
+<td>El sistema debe validar que el inicio de sesión no existe, cifrar la contraseña, crear el usuario en estado activo y mostrar un mensaje de confirmación</td>
+</tr>
+<tr>
+<td>E1-US1</td>
+<td>E1 — Administrar usuarios</td>
+<td>Como administrador</td>
+<td>Quiero crear un usuario en el sistema</td>
+<td>Para que puedan acceder al sistema según su rol asignado</td>
+<td>2</td>
+<td>El administrador está autenticado y NO completa correctamente todos los campos obligatorios</td>
+<td>Se registra un nuevo usuario</td>
+<td>El sistema debe impedir el registro de usuarios con campos obligatorios vacíos (`p_error_registro_obligatorios`)</td>
+</tr>
+<tr>
+<td>E1-US1</td>
+<td>E1 — Administrar usuarios</td>
+<td>Como administrador</td>
+<td>Quiero crear un usuario en el sistema</td>
+<td>Para que puedan acceder al sistema según su rol asignado</td>
+<td>3</td>
+<td>Ya existe un usuario con el mismo inicio de sesión</td>
+<td>El administrador intenta guardarlo</td>
+<td>El sistema no debe crear el usuario y mostrar el mensaje: "El nombre de usuario ya existe"</td>
+</tr>
+<tr>
+<td>E1-US1</td>
+<td>E1 — Administrar usuarios</td>
+<td>Como administrador</td>
+<td>Quiero crear un usuario en el sistema</td>
+<td>Para que puedan acceder al sistema según su rol asignado</td>
+<td>4</td>
+<td>El rol seleccionado es Médico/Terapeuta y no hay ningún profesional asociado</td>
+<td>Se intenta guardar</td>
+<td>El sistema deberá bloquear el registro y mostrar un mensaje indicando que se debe asociar un profesional</td>
+</tr>
+<tr>
+<td>E1-US1</td>
+<td>E1 — Administrar usuarios</td>
+<td>Como administrador</td>
+<td>Quiero crear un usuario en el sistema</td>
+<td>Para que puedan acceder al sistema según su rol asignado</td>
+<td>5</td>
+<td>La contraseña no cumple con la política mínima (por ejemplo, 8 caracteres)</td>
+<td>Se intenta guardar</td>
+<td>El sistema debe rechazar el registro y mostrar el mensaje: "La contraseña no cumple con la política mínima"</td>
+</tr>
+<tr>
+<td>E1-US2</td>
+<td>E1 — Administrar usuarios</td>
+<td>Como administrador</td>
+<td>Quiero actualizar la información del usuario</td>
+<td>Mantener datos correctos en el sistema</td>
+<td>1</td>
+<td>El usuario existe</td>
+<td>El administrador modifica datos válidos</td>
+<td>El sistema debe guardar los cambios y registrar un evento de auditoría</td>
+</tr>
+<tr>
+<td>E1-US2</td>
+<td>E1 — Administrar usuarios</td>
+<td>Como administrador</td>
+<td>Quiero actualizar la información del usuario</td>
+<td>Mantener datos correctos en el sistema</td>
+<td>2</td>
+<td>Se ingresan datos inconsistentes o ya existentes en el módulo de actualización</td>
+<td>El administrador intenta modificar datos</td>
+<td>El sistema debe informar que la actualización ha sido denegada y los datos ingresados ​​son inconsistentes</td>
+</tr>
+<tr>
+<td>E1-US2</td>
+<td>E1 — Administrar usuarios</td>
+<td>Como administrador</td>
+<td>Quiero actualizar la información del usuario</td>
+<td>Mantener datos correctos en el sistema</td>
+<td>3</td>
+<td>No hay ningún profesional asociado</td>
+<td>El administrador cambia el rol a médico</td>
+<td>El sistema debe bloquear la actualización y mostrar un mensaje indicando que se debe asociar un profesional</td>
+</tr>
+<tr>
+<td>E1-US3</td>
+<td>E1 — Administrar usuarios</td>
+<td>Como administrador</td>
+<td>Quiero consultar usuarios</td>
+<td>Para verificar su estado y rol</td>
+<td>1</td>
+<td>El administrador está autenticado</td>
+<td>Accede a la lista de usuarios</td>
+<td>El sistema muestra: inicio de sesión, nombre completo, rol y estado.</td>
+</tr>
+<tr>
+<td>E1-US4</td>
+<td>E1 — Administrar usuarios</td>
+<td>Como administrador</td>
+<td>Quiero desactivar usuarios</td>
+<td>Para evitar que un usuario acceda al sistema sin borrar su información</td>
+<td>1</td>
+<td>El administrador está autenticado, el usuario de destino existe y está en estado ACTIVO y existe al menos otro administrador activo en el sistema</td>
+<td>El administrador selecciona la opción "Desactivar usuario"</td>
+<td>El sistema cambia el estado del usuario a INACTIVO, impide el acceso futuro al sistema, registra la acción en auditoría y muestra un mensaje de confirmación</td>
+</tr>
+<tr>
+<td>E1-US4</td>
+<td>E1 — Administrar usuarios</td>
+<td>Como administrador</td>
+<td>Quiero desactivar usuarios</td>
+<td>Para evitar que un usuario acceda al sistema sin borrar su información</td>
+<td>2</td>
+<td>El usuario objetivo es el último administrador activo</td>
+<td>Se intenta desactivarlos</td>
+<td>El sistema bloquea la operación, mantiene el estado ACTIVO y muestra el mensaje: "No es posible desactivar el último administrador del sistema"</td>
+</tr>
+<tr>
+<td>E1-US4</td>
+<td>E1 — Administrar usuarios</td>
+<td>Como administrador</td>
+<td>Quiero desactivar usuarios</td>
+<td>Para evitar que un usuario acceda al sistema sin borrar su información</td>
+<td>3</td>
+<td>El usuario no existe en el sistema</td>
+<td>El administrador intenta desactivarlos</td>
+<td>El sistema no realiza ninguna acción y muestra un mensaje de error indicando que el usuario no existe</td>
+</tr>
+<tr>
+<td>E1-US4</td>
+<td>E1 — Administrar usuarios</td>
+<td>Como administrador</td>
+<td>Quiero desactivar usuarios</td>
+<td>Para evitar que un usuario acceda al sistema sin borrar su información</td>
+<td>4</td>
+<td>El usuario ya está en estado INACTIVO</td>
+<td>El administrador intenta desactivarlos nuevamente</td>
+<td>El sistema no realiza cambios y muestra un mensaje informativo: "El usuario ya está inactivo"</td>
+</tr>
+<tr>
+<td>E1-US4</td>
+<td>E1 — Administrar usuarios</td>
+<td>Como administrador</td>
+<td>Quiero desactivar usuarios</td>
+<td>Para evitar que un usuario acceda al sistema sin borrar su información</td>
+<td>5</td>
+<td>El usuario está en estado INACTIVO</td>
+<td>Intentan iniciar sesión</td>
+<td>El sistema rechaza el acceso, muestra el mensaje: "Usuario inactivo", y no crea sesión</td>
+</tr>
+<tr>
+<td>E2-US1</td>
+<td>E2 — Administrar autenticación y control de acceso</td>
+<td>Como usuario</td>
+<td>Quiero iniciar sesión</td>
+<td>Para acceder a mis funcionalidades autorizadas</td>
+<td>1</td>
+<td>El nombre de usuario y la contraseña son correctos</td>
+<td>El usuario presiona iniciar sesión</td>
+<td>El sistema valida las credenciales, crea una sesión y redirige según el rol</td>
+</tr>
+<tr>
+<td>E2-US1</td>
+<td>E2 — Administrar autenticación y control de acceso</td>
+<td>Como usuario</td>
+<td>Quiero iniciar sesión</td>
+<td>Para acceder a mis funcionalidades autorizadas</td>
+<td>2</td>
+<td>El nombre de usuario es incorrecto</td>
+<td>El usuario presiona iniciar sesión después de ingresar un nombre de usuario incorrecto</td>
+<td>El sistema bloquea el acceso y muestra el mensaje: "Nombre de usuario incorrecto"</td>
+</tr>
+<tr>
+<td>E2-US1</td>
+<td>E2 — Administrar autenticación y control de acceso</td>
+<td>Como usuario</td>
+<td>Quiero iniciar sesión</td>
+<td>Para acceder a mis funcionalidades autorizadas</td>
+<td>3</td>
+<td>La contraseña es incorrecta</td>
+<td>El usuario presiona iniciar sesión después de ingresar una contraseña incorrecta</td>
+<td>El sistema incrementa el contador de intentos (al 4to intento muestra: "Tiene un último intento, de lo contrario se bloqueará el inicio de sesión"; en 5 intentos se bloquean los campos del formulario. El usuario debe recuperar su contraseña haciendo clic en: "Recuperar contraseña") y muestra un mensaje genérico (no indica qué campo es incorrecto)</td>
+</tr>
+<tr>
+<td>E2-US1</td>
+<td>E2 — Administrar autenticación y control de acceso</td>
+<td>Como usuario</td>
+<td>Quiero iniciar sesión</td>
+<td>Para acceder a mis funcionalidades autorizadas</td>
+<td>4</td>
+<td>El usuario está inactivo</td>
+<td>El usuario presiona iniciar sesión mientras está inactivo</td>
+<td>El sistema bloquea el acceso y muestra el mensaje: "Usuario inactivo"</td>
+</tr>
+<tr>
+<td>E2-US2</td>
+<td>E2 — Administrar autenticación y control de acceso</td>
+<td>Como usuario</td>
+<td>Quiero recuperar el acceso</td>
+<td>Para restablecer mi contraseña</td>
+<td>1</td>
+<td>El correo electrónico está registrado</td>
+<td>El usuario solicita recuperación</td>
+<td>El sistema genera un token temporal y permite un cambio de contraseña</td>
+</tr>
+<tr>
+<td>E2-US2</td>
+<td>E2 — Administrar autenticación y control de acceso</td>
+<td>Como usuario</td>
+<td>Quiero recuperar el acceso</td>
+<td>Para restablecer mi contraseña</td>
+<td>2</td>
+<td>El usuario no existe</td>
+<td>El usuario solicita recuperación</td>
+<td>El sistema no revela si el usuario existe o no y muestra un mensaje</td>
+</tr>
+<tr>
+<td>E3-US1</td>
+<td>E3 — Programación autónoma de citas</td>
+<td>Como paciente</td>
+<td>Quiero programar una cita</td>
+<td>Recibir atención médica</td>
+<td>1</td>
+<td>Hay disponibilidad</td>
+<td>El paciente selecciona una franja horaria válida</td>
+<td>El sistema verifica la disponibilidad, crea la cita, bloquea la franja horaria y muestra la confirmación</td>
+</tr>
+<tr>
+<td>E3-US1</td>
+<td>E3 — Programación autónoma de citas</td>
+<td>Como paciente</td>
+<td>Quiero programar una cita</td>
+<td>Recibir atención médica</td>
+<td>2</td>
+<td>Dos usuarios intentan reservar la misma franja horaria</td>
+<td>El segundo usuario confirma</td>
+<td>El sistema detecta el conflicto, rechaza la operación y muestra el mensaje: "Franja horaria no disponible"</td>
+</tr>
+<tr>
+<td>E3-US1</td>
+<td>E3 — Programación autónoma de citas</td>
+<td>Como paciente</td>
+<td>Quiero programar una cita</td>
+<td>Recibir atención médica</td>
+<td>3</td>
+<td>Se muestran las fechas disponibles</td>
+<td>El paciente inicia el proceso de programación</td>
+<td>El sistema bloquea fechas pasadas.</td>
+</tr>
+<tr>
+<td>E3-US2</td>
+<td>E3 — Programación autónoma de citas</td>
+<td>Como paciente</td>
+<td>Quiero ver mis citas</td>
+<td>Para conocer fechas programadas</td>
+<td>1</td>
+<td>Hay citas programadas</td>
+<td>El paciente presiona "Ver mis citas"</td>
+<td>El sistema muestra: fecha, hora, médico, especialidad y estado.</td>
+</tr>
+<tr>
+<td>E3-US3</td>
+<td>E3 — Programación autónoma de citas</td>
+<td>Como paciente</td>
+<td>Quiero cancelar una cita</td>
+<td>Para liberar la franja horaria</td>
+<td>1</td>
+<td>Hay citas programadas</td>
+<td>El paciente presiona "Cancelar cita"</td>
+<td>El sistema cambia el estado a "Cancelado", libera el intervalo de tiempo y registra una entrada de auditoría.</td>
+</tr>
+<tr>
+<td>E4-US1</td>
+<td>E4 — Programación manual de citas</td>
+<td>Como médico o planificador</td>
+<td>Quiero registrar manualmente una cita</td>
+<td>Para asignar citas telefónicas</td>
+<td>1</td>
+<td>Hay disponibilidad y se ingresan todos los datos requeridos</td>
+<td>El médico o usuario selecciona una franja horaria válida</td>
+<td>El sistema valida: profesional activo, no colisión, intervalo válido y crea la cita.</td>
+</tr>
+<tr>
+<td>E4-US2</td>
+<td>E4 — Programación manual de citas</td>
+<td>Como médico o planificador</td>
+<td>Quiero reprogramar una cita</td>
+<td>Para cambiar la franja horaria</td>
+<td>1</td>
+<td>Hay disponibilidad</td>
+<td>El médico o programador selecciona una franja horaria válida</td>
+<td>El sistema valida la nueva franja horaria, actualiza la cita y registra el cambio en auditoría</td>
+</tr>
+<tr>
+<td>E4-US3</td>
+<td>E4 — Programación manual de citas</td>
+<td>Como médico o planificador</td>
+<td>Quiero exportar citas</td>
+<td>Para imprimir una lista diaria</td>
+<td>1</td>
+<td>Las citas existen</td>
+<td>El médico o programador selecciona una fecha y un médico</td>
+<td>El sistema genera un archivo CSV con columnas: fecha, hora, paciente, tipo de atención</td>
+</tr>
+<tr>
+<td>E5-US1</td>
+<td>E5 — Gestionar registros clínicos</td>
+<td>Como médico o terapeuta</td>
+<td>Quiero registrar una historia clínica</td>
+<td>Almacenar el diagnóstico y tratamiento del paciente</td>
+<td>1</td>
+<td>El médico o terapeuta está autenticado y el paciente existe</td>
+<td>Completan todos los campos obligatorios y guardan la información</td>
+<td>El sistema registra correctamente la historia clínica y confirma el guardado</td>
+</tr>
+<tr>
+<td>E5-US1</td>
+<td>E5 — Gestionar registros clínicos</td>
+<td>Como médico o terapeuta</td>
+<td>Quiero registrar una historia clínica</td>
+<td>Almacenar el diagnóstico y tratamiento del paciente</td>
+<td>2</td>
+<td>Faltan datos requeridos</td>
+<td>El médico o terapeuta intenta salvar</td>
+<td>El sistema muestra un mensaje de error indicando los campos faltantes</td>
+</tr>
+<tr>
+<td>E5-US1</td>
+<td>E5 — Gestionar registros clínicos</td>
+<td>Como médico o terapeuta</td>
+<td>Quiero registrar una historia clínica</td>
+<td>Almacenar el diagnóstico y tratamiento del paciente</td>
+<td>3</td>
+<td>El paciente no está registrado</td>
+<td>El médico o terapeuta intenta asociar la historia clínica</td>
+<td>El sistema impide el registro y notifica que el paciente no existe</td>
+</tr>
+<tr>
+<td>E5-US2</td>
+<td>E5 — Gestionar registros clínicos</td>
+<td>Como médico o terapeuta</td>
+<td>Quiero consultar la historia clínica de un paciente</td>
+<td>Para revisar antecedentes y diagnósticos previos</td>
+<td>1</td>
+<td>El paciente tiene antecedentes registrados</td>
+<td>El médico o terapeuta busca por identificación</td>
+<td>El sistema muestra toda la información histórica del paciente</td>
+</tr>
+<tr>
+<td>E5-US2</td>
+<td>E5 — Gestionar registros clínicos</td>
+<td>Como médico o terapeuta</td>
+<td>Quiero consultar la historia clínica de un paciente</td>
+<td>Para revisar antecedentes y diagnósticos previos</td>
+<td>2</td>
+<td>El paciente no tiene antecedentes</td>
+<td>El médico realiza la consulta</td>
+<td>El sistema informa que no hay registros clínicos registrados.</td>
+</tr>
+<tr>
+<td>E5-US3</td>
+<td>E5 — Gestionar registros clínicos</td>
+<td>Como médico o terapeuta</td>
+<td>Quiero actualizar la información de la historia clínica</td>
+<td>Corregir o complementar datos médicos</td>
+<td>1</td>
+<td>La historia clínica existe</td>
+<td>El médico o terapeuta modifica los datos y guarda los cambios</td>
+<td>El sistema actualiza la información correctamente</td>
+</tr>
+<tr>
+<td>E5-US3</td>
+<td>E5 — Gestionar registros clínicos</td>
+<td>Como médico o terapeuta</td>
+<td>Quiero actualizar la información de la historia clínica</td>
+<td>Corregir o complementar datos médicos</td>
+<td>2</td>
+<td>El usuario no es médico</td>
+<td>Intentan modificar historia clínica</td>
+<td>El sistema niega el acceso.</td>
+</tr>
+<tr>
+<td>E6-US1</td>
+<td>E6 — Gestionar auditorías</td>
+<td>Como administrador</td>
+<td>Quiero generar un reporte de traslado de pacientes</td>
+<td>Para controlar los movimientos entre áreas o centros médicos</td>
+<td>1</td>
+<td>Hay transferencias registradas</td>
+<td>El administrador selecciona un rango de fechas</td>
+<td>El sistema genera el informe con los datos correspondientes</td>
+</tr>
+<tr>
+<td>E6-US1</td>
+<td>E6 — Gestionar auditorías</td>
+<td>Como administrador</td>
+<td>Quiero generar un reporte de traslado de pacientes</td>
+<td>Para controlar los movimientos entre áreas o centros médicos</td>
+<td>2</td>
+<td>No hay transferencias en el rango seleccionado</td>
+<td>Se genera el informe</td>
+<td>El sistema muestra un mensaje indicando que no hay datos disponibles</td>
+</tr>
+<tr>
+<td>E6-US1</td>
+<td>E6 — Gestionar auditorías</td>
+<td>Como administrador</td>
+<td>Quiero generar un reporte de traslado de pacientes</td>
+<td>Para controlar los movimientos entre áreas o centros médicos</td>
+<td>3</td>
+<td>Se genera el informe</td>
+<td>El administrador selecciona la opción de exportación</td>
+<td>El sistema descarga el informe en formato PDF o Excel.</td>
+</tr>
+<tr>
+<td>E6-US2</td>
+<td>E6 — Gestionar auditorías</td>
+<td>Como administrador</td>
+<td>Quiero consultar el historial de acciones realizadas en el sistema</td>
+<td>Para verificar quién hizo las modificaciones</td>
+<td>1</td>
+<td>Existen registros de auditoría</td>
+<td>El administrador filtra por usuario</td>
+<td>El sistema muestra las acciones realizadas por ese usuario.</td>
+</tr>
+<tr>
+<td>E7-US1</td>
+<td>E7 — Gestionar informes y estadísticas</td>
+<td>Como administrador</td>
+<td>Quiero generar informes estadísticos</td>
+<td>Analizar el comportamiento del sistema y la atención médica</td>
+<td>1</td>
+<td>Hay citas registradas</td>
+<td>El administrador selecciona un rango de fechas</td>
+<td>El sistema muestra estadísticas del número de citas, cancelaciones y asistencias</td>
+</tr>
+<tr>
+<td>E7-US1</td>
+<td>E7 — Gestionar informes y estadísticas</td>
+<td>Como administrador</td>
+<td>Quiero generar informes estadísticos</td>
+<td>Analizar el comportamiento del sistema y la atención médica</td>
+<td>2</td>
+<td>Hay médicos con especialidades registradas</td>
+<td>El administrador filtra por especialidad</td>
+<td>El sistema muestra estadísticas asociadas a esa especialidad</td>
+</tr>
+<tr>
+<td>E7-US1</td>
+<td>E7 — Gestionar informes y estadísticas</td>
+<td>Como administrador</td>
+<td>Quiero generar informes estadísticos</td>
+<td>Analizar el comportamiento del sistema y la atención médica</td>
+<td>3</td>
+<td>Se genera el informe</td>
+<td>El sistema procesa la información</td>
+<td>El sistema muestra gráficos estadísticos (de barras o circulares).</td>
+</tr>
+<tr>
+<td>E8-US1</td>
+<td>E8 — Gestionar médicos y terapeutas</td>
+<td>Como administrador</td>
+<td>Quiero registrar un médico o terapeuta</td>
+<td>Para que puedan ser asignados a citas médicas</td>
+<td>1</td>
+<td>El administrador está autenticado</td>
+<td>Completan todos los campos obligatorios</td>
+<td>El sistema crea al profesional en estado activo</td>
+</tr>
+<tr>
+<td>E8-US1</td>
+<td>E8 — Gestionar médicos y terapeutas</td>
+<td>Como administrador</td>
+<td>Quiero registrar un médico o terapeuta</td>
+<td>Para que puedan ser asignados a citas médicas</td>
+<td>2</td>
+<td>El administrador está autenticado</td>
+<td>No completan válidamente todos los campos obligatorios</td>
+<td>El sistema debe impedir el registro profesional con datos requeridos vacíos o inconsistentes</td>
+</tr>
+<tr>
+<td>E8-US1</td>
+<td>E8 — Gestionar médicos y terapeutas</td>
+<td>Como administrador</td>
+<td>Quiero registrar un médico o terapeuta</td>
+<td>Para que puedan ser asignados a citas médicas</td>
+<td>3</td>
+<td>El intervalo de cita es menor o igual a cero</td>
+<td>El administrador completa el campo de intervalo de cita</td>
+<td>El sistema bloquea el registro y muestra "Hay una cita activa en este intervalo de tiempo"</td>
+</tr>
+<tr>
+<td>E8-US2</td>
+<td>E8 — Gestionar médicos y terapeutas</td>
+<td>Como administrador</td>
+<td>Quiero actualizar información profesional</td>
+<td>Para mantener las configuraciones correctas</td>
+<td>1</td>
+<td>El profesional tiene citas futuras programadas</td>
+<td>Se intenta desactivar o cambiar el intervalo disponible</td>
+<td>El sistema debe impedir la desactivación o exigir una reprogramación previa</td>
+</tr>
+<tr>
+<td>E8-US3</td>
+<td>E8 — Gestionar médicos y terapeutas</td>
+<td>Como administrador</td>
+<td>Quiero configurar días de asistencia y franjas horarias</td>
+<td>Entonces el sistema calcula la disponibilidad correctamente</td>
+<td>1</td>
+<td>El administrador está autenticado</td>
+<td>Se intenta crear una franja horaria que se superpone con otra</td>
+<td>El sistema debe evitar la superposición o exigir una reprogramación previa.</td>
+</tr>
+<tr>
+<td>E8-US4</td>
+<td>E8 — Gestionar médicos y terapeutas</td>
+<td>Como administrador</td>
+<td>Quiero consultar el listado de profesionales</td>
+<td>Para verificar su estado y configuración</td>
+<td>1</td>
+<td>Hay profesionales registrados</td>
+<td>El administrador accede al módulo</td>
+<td>El sistema muestra información completa.</td>
+</tr>
+<tr>
+<td>E8-US5</td>
+<td>E8 — Gestionar médicos y terapeutas</td>
+<td>Como administrador</td>
+<td>Quiero activar o desactivar un profesional</td>
+<td>Controlar su disponibilidad en el sistema</td>
+<td>1</td>
+<td>El médico o terapeuta no tiene citas futuras</td>
+<td>Se intenta desactivar al médico o terapeuta</td>
+<td>El sistema cambia el estado a INACTIVO</td>
+</tr>
+<tr>
+<td>E8-US5</td>
+<td>E8 — Gestionar médicos y terapeutas</td>
+<td>Como administrador</td>
+<td>Quiero activar o desactivar un profesional</td>
+<td>Controlar su disponibilidad en el sistema</td>
+<td>2</td>
+<td>El médico o terapeuta tiene citas futuras</td>
+<td>Se intenta desactivar al médico o terapeuta</td>
+<td>El sistema bloquea la operación y muestra un mensaje claro.</td>
+</tr>
+</table></body></html>
