@@ -6,9 +6,10 @@ spring:
     name: appointments-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/appointments_db
-    username: medical_user
-    password: ${DB_PASSWORD:medical123}
+    # Ajustado al puerto estándar 5432, usuario postgres y tu contraseña unificada
+    url: jdbc:postgresql://localhost:5432/appointments_db
+    username: postgres
+    password: admin123
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10
@@ -17,7 +18,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: false
+    show-sql: true # Cambiado a true para que veas las consultas en consola mientras depuras
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -27,7 +28,6 @@ spring:
     serialization:
       write-dates-as-timestamps: false
 
-# RabbitMQ Configuration
   rabbitmq:
     host: localhost
     port: 5672
@@ -42,20 +42,22 @@ spring:
           max-attempts: 3
         default-requeue-rejected: false
 
-# Management
 management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include:
+          - health
+          - info
+          - metrics
   endpoint:
     health:
       show-details: when-authorized
 
-# Logging
 logging:
   level:
     com.medical: INFO
+    org.springframework: INFO
     org.springframework.web: INFO
-    org.hibernate.SQL: WARN
+    org.hibernate.SQL: DEBUG # Cambiado a DEBUG para ver el mapeo de tablas de citas
     org.springframework.amqp: INFO

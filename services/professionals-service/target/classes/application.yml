@@ -1,18 +1,30 @@
+server:
+  port: 8083
+
 spring:
   application:
     name: professionals-service
+
   datasource:
     url: jdbc:postgresql://localhost:5432/professionals_db
     username: postgres
-    password: postgres
+    password: admin123 # Estandarizado a tu contraseña unificada
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true # Para que veas las consultas de los médicos en consola
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
   rabbitmq:
     host: localhost
     port: 5672
     username: guest
     password: guest
-
-server:
-  port: 8083
 
 management:
   endpoints:

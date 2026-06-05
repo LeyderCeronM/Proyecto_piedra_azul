@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.piedrazul.desktop.appointments.AppointmentsController">
+
+    <children>
+        <VBox spacing="8" AnchorPane.topAnchor="8" AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.bottomAnchor="8" style="-fx-padding:12;">
+            <Label text="Crear Cita" style="-fx-font-size:16px; -fx-font-weight:600;"/>
+            <TextField fx:id="patientField" promptText="Paciente" />
+            <TextField fx:id="doctorField" promptText="Médico" />
+            <TextField fx:id="dateField" promptText="Fecha (YYYY-MM-DD)" />
+            <HBox spacing="8">
+                <Button text="Guardar" onAction="#onSaveAppointment" />
+            </HBox>
+        </VBox>
+    </children>
+
+</AnchorPane>

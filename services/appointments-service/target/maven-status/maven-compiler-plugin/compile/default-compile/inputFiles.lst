@@ -1,18 +1,20 @@
-/home/juan/repos/saved/Piedrazul-Medical-Services-Network/services/appointments-service/src/main/java/com/medical/exception/ValidationTimeoutException.java
-/home/juan/repos/saved/Piedrazul-Medical-Services-Network/services/appointments-service/src/main/java/com/medical/config/RabbitMQConfig.java
-/home/juan/repos/saved/Piedrazul-Medical-Services-Network/services/appointments-service/src/main/java/com/medical/service/AppointmentServiceImpl.java
-/home/juan/repos/saved/Piedrazul-Medical-Services-Network/services/appointments-service/src/main/java/com/medical/service/AppointmentService.java
-/home/juan/repos/saved/Piedrazul-Medical-Services-Network/services/appointments-service/src/main/java/com/medical/exception/GlobalExceptionHandler.java
-/home/juan/repos/saved/Piedrazul-Medical-Services-Network/services/appointments-service/src/main/java/com/medical/controller/AppointmentController.java
-/home/juan/repos/saved/Piedrazul-Medical-Services-Network/services/appointments-service/src/main/java/com/medical/AppointmentsServiceApplication.java
-/home/juan/repos/saved/Piedrazul-Medical-Services-Network/services/appointments-service/src/main/java/com/medical/dto/PatientValidationRequest.java
-/home/juan/repos/saved/Piedrazul-Medical-Services-Network/services/appointments-service/src/main/java/com/medical/entity/AppointmentStatus.java
-/home/juan/repos/saved/Piedrazul-Medical-Services-Network/services/appointments-service/src/main/java/com/medical/dto/AppointmentResponse.java
-/home/juan/repos/saved/Piedrazul-Medical-Services-Network/services/appointments-service/src/main/java/com/medical/exception/AppointmentNotFoundException.java
-/home/juan/repos/saved/Piedrazul-Medical-Services-Network/services/appointments-service/src/main/java/com/medical/repository/AppointmentRepository.java
-/home/juan/repos/saved/Piedrazul-Medical-Services-Network/services/appointments-service/src/main/java/com/medical/dto/UpdateAppointmentRequest.java
-/home/juan/repos/saved/Piedrazul-Medical-Services-Network/services/appointments-service/src/main/java/com/medical/exception/InvalidAppointmentException.java
-/home/juan/repos/saved/Piedrazul-Medical-Services-Network/services/appointments-service/src/main/java/com/medical/facade/PatientValidationFacade.java
-/home/juan/repos/saved/Piedrazul-Medical-Services-Network/services/appointments-service/src/main/java/com/medical/dto/CreateAppointmentRequest.java
-/home/juan/repos/saved/Piedrazul-Medical-Services-Network/services/appointments-service/src/main/java/com/medical/dto/PatientValidationResponse.java
-/home/juan/repos/saved/Piedrazul-Medical-Services-Network/services/appointments-service/src/main/java/com/medical/entity/Appointment.java
+E:\Semestre ##6\Software Engineering ll\Proyecto_final_piedra_azul\Piedrazul-Medical-Services-Network\services\appointments-service\src\main\java\com\medical\appointments\model\Appointment.java
+E:\Semestre ##6\Software Engineering ll\Proyecto_final_piedra_azul\Piedrazul-Medical-Services-Network\services\appointments-service\src\main\java\com\medical\appointments\repository\AppointmentRepository.java
+E:\Semestre ##6\Software Engineering ll\Proyecto_final_piedra_azul\Piedrazul-Medical-Services-Network\services\appointments-service\src\main\java\com\medical\AppointmentsServiceApplication.java
+E:\Semestre ##6\Software Engineering ll\Proyecto_final_piedra_azul\Piedrazul-Medical-Services-Network\services\appointments-service\src\main\java\com\medical\config\RabbitMQConfig.java
+E:\Semestre ##6\Software Engineering ll\Proyecto_final_piedra_azul\Piedrazul-Medical-Services-Network\services\appointments-service\src\main\java\com\medical\controller\AppointmentController.java
+E:\Semestre ##6\Software Engineering ll\Proyecto_final_piedra_azul\Piedrazul-Medical-Services-Network\services\appointments-service\src\main\java\com\medical\dto\AppointmentResponse.java
+E:\Semestre ##6\Software Engineering ll\Proyecto_final_piedra_azul\Piedrazul-Medical-Services-Network\services\appointments-service\src\main\java\com\medical\dto\CreateAppointmentRequest.java
+E:\Semestre ##6\Software Engineering ll\Proyecto_final_piedra_azul\Piedrazul-Medical-Services-Network\services\appointments-service\src\main\java\com\medical\dto\PatientValidationRequest.java
+E:\Semestre ##6\Software Engineering ll\Proyecto_final_piedra_azul\Piedrazul-Medical-Services-Network\services\appointments-service\src\main\java\com\medical\dto\PatientValidationResponse.java
+E:\Semestre ##6\Software Engineering ll\Proyecto_final_piedra_azul\Piedrazul-Medical-Services-Network\services\appointments-service\src\main\java\com\medical\dto\UpdateAppointmentRequest.java
+E:\Semestre ##6\Software Engineering ll\Proyecto_final_piedra_azul\Piedrazul-Medical-Services-Network\services\appointments-service\src\main\java\com\medical\entity\Appointment.java
+E:\Semestre ##6\Software Engineering ll\Proyecto_final_piedra_azul\Piedrazul-Medical-Services-Network\services\appointments-service\src\main\java\com\medical\entity\AppointmentStatus.java
+E:\Semestre ##6\Software Engineering ll\Proyecto_final_piedra_azul\Piedrazul-Medical-Services-Network\services\appointments-service\src\main\java\com\medical\exception\AppointmentNotFoundException.java
+E:\Semestre ##6\Software Engineering ll\Proyecto_final_piedra_azul\Piedrazul-Medical-Services-Network\services\appointments-service\src\main\java\com\medical\exception\GlobalExceptionHandler.java
+E:\Semestre ##6\Software Engineering ll\Proyecto_final_piedra_azul\Piedrazul-Medical-Services-Network\services\appointments-service\src\main\java\com\medical\exception\InvalidAppointmentException.java
+E:\Semestre ##6\Software Engineering ll\Proyecto_final_piedra_azul\Piedrazul-Medical-Services-Network\services\appointments-service\src\main\java\com\medical\exception\ValidationTimeoutException.java
+E:\Semestre ##6\Software Engineering ll\Proyecto_final_piedra_azul\Piedrazul-Medical-Services-Network\services\appointments-service\src\main\java\com\medical\facade\PatientValidationFacade.java
+E:\Semestre ##6\Software Engineering ll\Proyecto_final_piedra_azul\Piedrazul-Medical-Services-Network\services\appointments-service\src\main\java\com\medical\repository\AppointmentRepository.java
+E:\Semestre ##6\Software Engineering ll\Proyecto_final_piedra_azul\Piedrazul-Medical-Services-Network\services\appointments-service\src\main\java\com\medical\service\AppointmentService.java
+E:\Semestre ##6\Software Engineering ll\Proyecto_final_piedra_azul\Piedrazul-Medical-Services-Network\services\appointments-service\src\main\java\com\medical\service\AppointmentServiceImpl.java

@@ -1,0 +1,49 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: users-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/v1/users/**
+          filters:
+            - RewritePath=/api/v1/users/(?<segment>.*), /api/users/${segment}
+
+        - id: appointments-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/v1/appointments/**
+          filters:
+            - RewritePath=/api/v1/appointments/(?<segment>.*), /api/appointments/${segment}
+
+        - id: professionals-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/v1/professionals/**
+
+        - id: clinical-records-service
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api/v1/clinical-records/**
+
+        - id: reports-service
+          uri: http://localhost:8085
+          predicates:
+            - Path=/api/v1/reports/**
+
+        - id: audits-service
+          uri: http://localhost:8086
+          predicates:
+            - Path=/api/v1/audits/**
+
+      default-filters:
+        - AddRequestHeader=X-Forwarded-Proto, https
+
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO

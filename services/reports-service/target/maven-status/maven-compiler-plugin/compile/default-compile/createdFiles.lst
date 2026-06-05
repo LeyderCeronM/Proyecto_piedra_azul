@@ -1,0 +1,8 @@
+com\piedrazul\reports\model\ReportEntity.class
+com\piedrazul\reports\repository\ReportRepository.class
+com\piedrazul\reports\service\ReportsService.class
+com\piedrazul\reports\exception\RestExceptionHandler.class
+com\piedrazul\reports\model\ReportRequest.class
+com\piedrazul\reports\model\ReportResponse.class
+com\piedrazul\reports\ReportsServiceApplication.class
+com\piedrazul\reports\controller\ReportsController.class

@@ -1,19 +1,27 @@
+server:
+  port: 8086 # Cambiado a 8086 porque el 8085 ya lo tiene ocupado reports-service
+
 spring:
+  application:
+    name: audit-service
+
   datasource:
     url: jdbc:postgresql://localhost:5432/piedrazul_audits
     username: postgres
-    password: postgres
+    password: admin123 # Estandarizado a tu contraseña unificada
+    driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
+
   rabbitmq:
     host: localhost
     port: 5672
     username: guest
     password: guest
-
-server:
-  port: 8085
