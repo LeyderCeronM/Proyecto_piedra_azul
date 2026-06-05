@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: professionals-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/professionals_db
+    username: postgres
+    password: postgres
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+server:
+  port: 8083
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    root: INFO
