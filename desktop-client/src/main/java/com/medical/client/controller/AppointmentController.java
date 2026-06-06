@@ -2,7 +2,6 @@ package com.medical.client.controller;
 
 import com.medical.client.dto.AppointmentDto;
 import com.medical.client.service.AppointmentServiceClient;
-import com.medical.client.service.ServiceException;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

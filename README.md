@@ -84,6 +84,12 @@ Medical-Services-Network/
 
 ## Inicio Rápido
 
+Nota importante sobre el orden de arranque:
+Para garantizar la correcta resolución de dependencias entre servicios, se recomienda iniciar primero el api-gateway y posteriormente los servicios de dominio. Los microservicios utilizarán Service Discovery (si está configurado) o conexión directa mediante variables de entorno definibles en el archivo .env del root del proyecto.
+
+
+
+
 ### 1. Levantar Infraestructura
 
 ```bash
@@ -173,5 +179,5 @@ Este proyecto es para fines educativos y de demostración.
 
 ## Autores
 
-Henry Fernando Mulato Llanten - Juan Jose Rodriguez - Leyder Ceron
+Juan Jose Rodriguez - Leyder Ceron
 Centro de Salud Piedra Azul - Popayán, Colombia
