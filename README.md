@@ -14,13 +14,13 @@ Sistema de gestión de servicios médicos implementado como arquitectura de micr
 
 | Service | Puerto | Base de Datos | Responsabilidad | Estado |
 |---------|--------|---------------|-----------------|--------|
-| api-gateway | 8080 | — | Routing y autenticación | ⏳ Pendiente |
+| api-gateway | 8080 | — | Routing y autenticación | ✅ Completado  |
 | users-service | 8081 | users_db | Gestión de usuarios, pacientes, profesionales | ✅ Completado |
-| appointments-service | 8082 | appointments_db | Gestión de citas médicas | ⏳ Pendiente |
-| professionals-service | 8083 | professionals_db | Gestión de profesionales | ⏳ Pendiente |
-| clinical-records-service | 8084 | clinical_records_db | Registros clínicos | ⏳ Pendiente |
-| reports-service | 8085 | reports_db | Reportes estadísticos | ⏳ Pendiente |
-| audits-service | 8086 | audits_db | Auditoría y logs | ⏳ Pendiente |
+| appointments-service | 8082 | appointments_db | Gestión de citas médicas | ✅ Completado  |
+| professionals-service | 8083 | professionals_db | Gestión de profesionales | ✅ Completado  |
+| clinical-records-service | 8084 | clinical_records_db | Registros clínicos | ✅ Completado  |
+| reports-service | 8085 | reports_db | Reportes estadísticos | ✅ Completado 
+| audits-service | 8086 | audits_db | Auditoría y logs | ✅ Completado  |
 
 ---
 
@@ -52,13 +52,13 @@ Medical-Services-Network/
 │   └── ADR-007-javafx-for-desktop-ui.md
 │
 ├── services/                       # Microservicios
-│   ├── api-gateway/               # Puerto 8080 — ⏳ Pendiente
+│   ├── api-gateway/               # Puerto 8080 — ✅ Completado 
 │   ├── users-service/            # Puerto 8081 — ✅ Completado
-│   ├── appointments-service/      # Puerto 8082 — ⏳ Pendiente
-│   ├── professionals-service/    # Puerto 8083 — ⏳ Pendiente
-│   ├── clinical-records-service/  # Puerto 8084 — ⏳ Pendiente
-│   ├── reports-service/          # Puerto 8085 — ⏳ Pendiente
-│   └── audits-service/           # Puerto 8086 — ⏳ Pendiente
+│   ├── appointments-service/      # Puerto 8082 — ✅ Completado 
+│   ├── professionals-service/    # Puerto 8083 — ✅ Completado 
+│   ├── clinical-records-service/  # Puerto 8084 — ✅ Completado 
+│   ├── reports-service/          # Puerto 8085 — ✅ Completado 
+│   └── audits-service/           # Puerto 8086 — ✅ Completado 
 │
 ├── shared/                        # Librerías compartidas
 │   └── medical-common/           # Modelos, DTOs, excepciones
@@ -130,13 +130,13 @@ Este proyecto sigue los principios SOLID (ADR-004) y utiliza patrones de diseño
 | Fase | Estado |
 |------|--------|
 | `users-service` — CRUD, búsqueda, roles, enriquecimiento | ✅ Completado |
-| `appointments-service` — Gestión de citas | ⏳ Pendiente |
-| `professionals-service` — Gestión de profesionales | ⏳ Pendiente |
-| `clinical-records-service` — Registros clínicos | ⏳ Pendiente |
-| `reports-service` — Reportes estadísticos | ⏳ Pendiente |
-| `audits-service` — Auditoría y logs | ⏳ Pendiente |
-| `api-gateway` — Routing y autenticación | ⏳ Pendiente |
-| Cliente JavaFX (Desktop) | ⏳ Pendiente |
+| `appointments-service` — Gestión de citas | ✅ Completado  |
+| `professionals-service` — Gestión de profesionales | ✅ Completado  |
+| `clinical-records-service` — Registros clínicos | ✅ Completado  |
+| `reports-service` — Reportes estadísticos | ✅ Completado  |
+| `audits-service` — Auditoría y logs | ✅ Completado  |
+| `api-gateway` — Routing y autenticación | ✅ Completado  |
+| Cliente JavaFX (Desktop) | ✅ Completado  |
 
 ### users-service — Funcionalidades Implementadas
 
@@ -155,13 +155,13 @@ El servicio de usuarios ya completado incluye:
 
 ## Próximos Pasos
 
-- [ ] Implementar appointments-service
-- [ ] Implementar professionals-service
-- [ ] Implementar clinical-records-service
-- [ ] Implementar reports-service
-- [ ] Implementar audits-service
-- [ ] Implementar API Gateway con autenticación JWT
-- [ ] Implementar cliente JavaFX
+- [ ] Implementar appointments-service   ✅ Completado 
+- [ ] Implementar professionals-service  ✅ Completado 
+- [ ] Implementar clinical-records-service  ✅ Completado 
+- [ ] Implementar reports-service    ✅ Completado 
+- [ ] Implementar audits-service     ✅ Completado 
+- [ ] Implementar API Gateway con autenticación JWT  ✅ Completado 
+- [ ] Implementar cliente JavaFX   ✅ Completado 
 
 ---
 

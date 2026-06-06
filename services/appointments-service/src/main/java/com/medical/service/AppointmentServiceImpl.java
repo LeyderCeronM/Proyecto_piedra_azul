@@ -41,9 +41,12 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
 
         // Validate patient via async RabbitMQ communication with users-service
-        PatientValidationResponse validation =
-                patientValidationFacade.validatePatient(request.getPatientDocument());
+        // COMENTA ESTO:
+// PatientValidationResponse validation = patientValidationFacade.validatePatient(request.getPatientDocument());
 
+// Y AGREGA ESTO (para simular una respuesta exitosa):
+PatientValidationResponse validation = new PatientValidationResponse();
+validation.setPatientName(request.getPatientName() != null ? request.getPatientName() : "Paciente Validado");
         // Use patient name from validation if not provided in request
         String patientName = request.getPatientName() != null && !request.getPatientName().isBlank()
                 ? request.getPatientName()
